@@ -17,13 +17,14 @@ export default function Root({ children }: PropsWithChildren) {
 
         {/* PWA */}
         <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/png" href="/icons/appicon.png" />
         <meta name="theme-color" content="#3B2A24" />
 
         {/* iOS: comportamiento de app instalada */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="AppBalance" />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/icons/appicon.png" />
 
         <ScrollViewStyleReset />
 

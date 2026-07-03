@@ -2,7 +2,7 @@
 // Objetivo: hacer la app INSTALABLE en iOS y que abra rápido, SIN servir
 // datos financieros viejos. Regla de oro: nunca cachear Supabase.
 
-const CACHE = 'appbalance-shell-v1';
+const CACHE = 'appbalance-shell-v2';
 
 // Instala y activa de inmediato (sin esperar a que se cierren pestañas viejas).
 self.addEventListener('install', (event) => {
