@@ -131,16 +131,19 @@ export function useDeleteFixedExpense() {
   });
 }
 
-// Salda un período: crea el consumo y lo enlaza (RPC atómica).
+// Salda el gasto fijo del mes en curso: garantiza el período (lo crea si
+// falta, para cualquier recurrencia) y crea el consumo enlazado. Recibe el
+// fixed_expense_id —siempre disponible— para que "Pagar" nunca quede sin
+// efecto por un payment_id nulo.
 export function usePayFixedExpense() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: {
-      paymentId: string;
+      fixedExpenseId: string;
       paymentMethodId?: string | null;
     }): Promise<string> => {
-      const { data, error } = await supabase.rpc('pay_fixed_expense', {
-        p_payment_id: input.paymentId,
+      const { data, error } = await supabase.rpc('pay_fixed_expense_current', {
+        p_fixed_expense_id: input.fixedExpenseId,
         p_payment_method_id: input.paymentMethodId ?? null,
         p_occurred_at: null,
       });

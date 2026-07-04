@@ -1,6 +1,8 @@
 import { Pressable, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 type Props = {
   title: string;
@@ -17,6 +19,8 @@ export function Button({
   loading,
   disabled,
 }: Props) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const isPrimary = variant === 'primary';
   const isDisabled = disabled || loading;
   return (
@@ -31,7 +35,7 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? colors.textOnDark : colors.coffee} />
+        <ActivityIndicator color={isPrimary ? theme.textOnDark : theme.coffee} />
       ) : (
         <Text style={[styles.text, isPrimary ? styles.textPrimary : styles.textSecondary]}>
           {title}
@@ -41,19 +45,20 @@ export function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    height: 50,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
-  },
-  primary: { backgroundColor: colors.coffee },
-  secondary: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.coffee },
-  pressed: { opacity: 0.85 },
-  disabled: { opacity: 0.5 },
-  text: { ...typography.subtitle },
-  textPrimary: { color: colors.textOnDark },
-  textSecondary: { color: colors.coffee },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    base: {
+      height: 50,
+      borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: spacing.lg,
+    },
+    primary: { backgroundColor: t.coffee },
+    secondary: { backgroundColor: 'transparent', borderWidth: 1, borderColor: t.coffee },
+    pressed: { opacity: 0.85 },
+    disabled: { opacity: 0.5 },
+    text: { ...typography.subtitle },
+    textPrimary: { color: t.textOnDark },
+    textSecondary: { color: t.caramel },
+  });

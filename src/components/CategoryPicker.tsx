@@ -7,8 +7,10 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { categoryIconUri } from '@/features/catalog/categoryIcons';
 
 export type CategoryOption = {
@@ -31,6 +33,7 @@ const TILE_H = 44;
 // Los tiles se apilan en columnas (llenan de arriba a abajo) hasta el límite
 // del contenedor; lo que sobra se navega con scroll horizontal.
 export function CategoryPicker({ options, selectedId, onSelect, heightRatio = 0.3 }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const { height } = useWindowDimensions();
   const containerHeight = Math.round(height * heightRatio);
 
@@ -67,26 +70,27 @@ export function CategoryPicker({ options, selectedId, onSelect, heightRatio = 0.
   );
 }
 
-const styles = StyleSheet.create({
-  container: { marginVertical: spacing.sm },
-  grid: { flexDirection: 'column', flexWrap: 'wrap', alignContent: 'flex-start' },
-  tile: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    width: 150,
-    height: TILE_H,
-    paddingHorizontal: spacing.md,
-    marginRight: spacing.sm,
-    marginBottom: spacing.sm,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-  },
-  tileActive: { backgroundColor: colors.coffee, borderColor: colors.coffee },
-  icon: { width: 22, height: 22, resizeMode: 'contain' },
-  emoji: { fontSize: 18, width: 22, textAlign: 'center' },
-  label: { ...typography.body, color: colors.textPrimary, flex: 1 },
-  labelActive: { color: colors.textOnDark, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { marginVertical: spacing.sm },
+    grid: { flexDirection: 'column', flexWrap: 'wrap', alignContent: 'flex-start' },
+    tile: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      width: 150,
+      height: TILE_H,
+      paddingHorizontal: spacing.md,
+      marginRight: spacing.sm,
+      marginBottom: spacing.sm,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+    },
+    tileActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    icon: { width: 22, height: 22, resizeMode: 'contain' },
+    emoji: { fontSize: 18, width: 22, textAlign: 'center' },
+    label: { ...typography.body, color: t.textPrimary, flex: 1 },
+    labelActive: { color: t.textOnDark, fontWeight: '600' },
+  });

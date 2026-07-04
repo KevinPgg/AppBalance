@@ -4,8 +4,9 @@ import { Card } from '@/components/Card';
 import { FixedExpenseRow } from '@/features/fixed/FixedExpenseRow';
 import { useFixedExpensesCurrent } from '@/features/fixed/useFixedExpenses';
 import { formatMoney } from '@/lib/money';
-import { colors } from '@/theme/colors';
 import { spacing, typography } from '@/theme/typography';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 const PREVIEW = 3;
 
@@ -13,6 +14,7 @@ const PREVIEW = 3;
 // a la pantalla completa. Si no hay gastos fijos, invita a crear el primero.
 export function FixedExpensesCard() {
   const router = useRouter();
+  const styles = useThemedStyles(makeStyles);
   const fixed = useFixedExpensesCurrent();
   const items = fixed.data ?? [];
 
@@ -94,20 +96,21 @@ export function FixedExpensesCard() {
   );
 }
 
-const styles = StyleSheet.create({
-  card: { marginBottom: spacing.lg },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  title: { ...typography.subtitle, color: colors.espresso },
-  sub: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
-  link: { ...typography.body, color: colors.coffee, fontWeight: '600' },
-  empty: { ...typography.body, color: colors.textSecondary, marginTop: spacing.sm },
-  errorText: { ...typography.caption, color: colors.danger, marginTop: spacing.sm },
-  divider: { height: 1, backgroundColor: colors.border, marginTop: spacing.md },
-  rowDivider: { height: 1, backgroundColor: colors.border },
-  moreBtn: { paddingTop: spacing.md, alignItems: 'center' },
-  moreText: { ...typography.caption, color: colors.coffee, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    card: { marginBottom: spacing.lg },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+    },
+    title: { ...typography.subtitle, color: t.textPrimary },
+    sub: { ...typography.caption, color: t.textSecondary, marginTop: 2 },
+    link: { ...typography.body, color: t.caramel, fontWeight: '600' },
+    empty: { ...typography.body, color: t.textSecondary, marginTop: spacing.sm },
+    errorText: { ...typography.caption, color: t.danger, marginTop: spacing.sm },
+    divider: { height: 1, backgroundColor: t.border, marginTop: spacing.md },
+    rowDivider: { height: 1, backgroundColor: t.border },
+    moreBtn: { paddingTop: spacing.md, alignItems: 'center' },
+    moreText: { ...typography.caption, color: t.caramel, fontWeight: '600' },
+  });

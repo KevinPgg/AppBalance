@@ -3,18 +3,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { TransactionForm, type TxFormInitial } from '@/features/transactions/TransactionForm';
 import { useTransaction } from '@/features/transactions/useTransactions';
-import { colors } from '@/theme/colors';
 import { spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 export default function EditTransactionScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const { id } = useLocalSearchParams<{ id: string }>();
   const tx = useTransaction(id);
 
   if (tx.isLoading) {
     return (
       <SafeAreaView style={styles.center}>
-        <ActivityIndicator color={colors.coffee} />
+        <ActivityIndicator color={theme.coffee} />
       </SafeAreaView>
     );
   }
@@ -54,7 +58,8 @@ export default function EditTransactionScreen() {
   return <TransactionForm mode="edit" initial={initial} onDone={() => router.back()} />;
 }
 
-const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.cream },
-  msg: { ...typography.body, color: colors.textSecondary, padding: spacing.xl, textAlign: 'center' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: t.cream },
+    msg: { ...typography.body, color: t.textSecondary, padding: spacing.xl, textAlign: 'center' },
+  });

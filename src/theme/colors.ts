@@ -1,20 +1,15 @@
-// Paleta café (de la imagen de referencia). Modo claro cálido.
-export const colors = {
-  espresso: '#3B2A24',
-  coffee: '#5E3B30',
-  mocha: '#9B6A50',
-  latte: '#C9A57E',
-  sage: '#A9A491',
-  cream: '#EFE7DC',
-  foam: '#FBF7F1',
-  success: '#6B8F71',
-  warning: '#C98A4B',
-  danger: '#A14B3C',
-  // texto
-  textPrimary: '#3B2A24',
-  textSecondary: '#7A6E64',
-  textOnDark: '#FBF7F1',
-  border: '#E2D7C8',
-} as const;
+// ⚠️ DEPRECADO — no usar en código nuevo.
+// El sistema de temas vive en `src/theme/themes.ts` + `useTheme()`
+// (`src/store/theme.ts`). Ya ninguna pantalla importa este archivo.
+// Se conserva solo como shim por compatibilidad; puedes borrarlo del
+// proyecto cuando quieras (ningún import apunta aquí).
+//
+// Si algo lo importara por error, devuelve la paleta Latte (cafe-light),
+// que era el look por defecto anterior.
+import { THEMES } from '@/theme/themes';
 
+/** @deprecated Usa `useTheme()` de `@/store/theme`. */
+export const colors = THEMES['cafe-light'];
+
+/** @deprecated */
 export type ColorName = keyof typeof colors;

@@ -1,6 +1,7 @@
 import { ImageBackground, View, Text, StyleSheet } from 'react-native';
-import { colors } from '@/theme/colors';
 import { spacing, typography, radius } from '@/theme/typography';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 type Props = {
   title?: string;
@@ -14,6 +15,7 @@ export function UnderConstruction({
   title = 'En construcción',
   subtitle = 'Estamos trabajando en esta sección. Vuelve pronto.',
 }: Props) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <ImageBackground
       source={{ uri: '/under_construction/UnderConstruction.gif' }}
@@ -30,18 +32,19 @@ export function UnderConstruction({
   );
 }
 
-const styles = StyleSheet.create({
-  bg: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  veil: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(59,42,36,0.55)' },
-  card: {
-    backgroundColor: colors.foam,
-    borderRadius: radius.md,
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.xl,
-    marginHorizontal: spacing.xl,
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  title: { ...typography.title, color: colors.textPrimary, textAlign: 'center' },
-  subtitle: { ...typography.body, color: colors.textSecondary, textAlign: 'center' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    bg: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    veil: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(59,42,36,0.55)' },
+    card: {
+      backgroundColor: t.foam,
+      borderRadius: radius.md,
+      paddingVertical: spacing.lg,
+      paddingHorizontal: spacing.xl,
+      marginHorizontal: spacing.xl,
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    title: { ...typography.title, color: t.textPrimary, textAlign: 'center' },
+    subtitle: { ...typography.body, color: t.textSecondary, textAlign: 'center' },
+  });

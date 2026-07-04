@@ -14,8 +14,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { MoneyInput } from '@/components/MoneyInput';
 import { SelectChips } from '@/components/SelectChips';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { centsToText, parseToCents } from '@/lib/money';
 import { confirmAsync, notify } from '@/lib/confirm';
 import { usePaymentMethods } from '@/features/catalog/useCatalog';
@@ -50,6 +52,8 @@ type Props = {
 };
 
 export function IncomeForm({ mode, initial, onDone }: Props) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const paymentMethods = usePaymentMethods();
   const createTx = useCreateTransaction();
   const updateTx = useUpdateTransaction();
@@ -149,7 +153,7 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
             value={origin}
             onChangeText={setOrigin}
             placeholder="¿De dónde viene?"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
           />
           <View style={styles.suggestRow}>
             {ORIGIN_SUGGESTIONS.map((s) => (
@@ -197,61 +201,62 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  headerTitle: { ...typography.subtitle, color: colors.espresso },
-  cancel: { ...typography.body, color: colors.coffee, width: 64 },
-  body: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs, flexGrow: 1 },
-  label: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: spacing.lg,
-    marginBottom: spacing.xs,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  input: {
-    backgroundColor: colors.foam,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    height: 50,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  suggestRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm },
-  suggest: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-  },
-  suggestText: { ...typography.caption, color: colors.coffee },
-  deleteBtn: {
-    marginTop: 'auto',
-    paddingVertical: spacing.md,
-    alignItems: 'center',
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.danger,
-  },
-  deleteText: { ...typography.subtitle, color: colors.danger },
-  footer: {
-    padding: spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.cream,
-  },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    headerTitle: { ...typography.subtitle, color: t.textPrimary },
+    cancel: { ...typography.body, color: t.caramel, width: 64 },
+    body: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs, flexGrow: 1 },
+    label: {
+      ...typography.caption,
+      color: t.textSecondary,
+      marginTop: spacing.lg,
+      marginBottom: spacing.xs,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    input: {
+      backgroundColor: t.foam,
+      borderWidth: 1,
+      borderColor: t.border,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      height: 50,
+      ...typography.body,
+      color: t.textPrimary,
+    },
+    suggestRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm },
+    suggest: {
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.md,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+    },
+    suggestText: { ...typography.caption, color: t.caramel },
+    deleteBtn: {
+      marginTop: 'auto',
+      paddingVertical: spacing.md,
+      alignItems: 'center',
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.danger,
+    },
+    deleteText: { ...typography.subtitle, color: t.danger },
+    footer: {
+      padding: spacing.xl,
+      borderTopWidth: 1,
+      borderTopColor: t.border,
+      backgroundColor: t.cream,
+    },
+  });

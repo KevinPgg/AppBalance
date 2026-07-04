@@ -86,6 +86,25 @@ Decisión de distribuir como **PWA** en lugar de app nativa (ver `00_README.md` 
 
 ---
 
+## Fase 2.6 — Correcciones: Pagar gasto fijo + legibilidad modo oscuro (4 jul 2026) ✅
+
+Dos bugs reportados tras usar la app en temas oscuros.
+
+1. ✅ **El botón "Pagar" de gastos fijos no siempre creaba el consumo.** Causa: `pay_fixed_expense(p_payment_id)` exige que ya exista la fila de período (`fixed_expense_payments`), pero esa fila solo la genera `ensure_fixed_expense_periods()` para `recurrence='monthly'`. Para gastos semanales/anuales —o antes de que se genere el período— `payment_id` llegaba `NULL` a la vista, el botón quedaba deshabilitado (`disabled={!item.payment_id}`) y no pasaba nada.
+   - **Fix (BD):** nueva RPC `pay_fixed_expense_current(p_fixed_expense_id, …)` que garantiza el período del mes en curso (lo crea si falta, para cualquier recurrencia) y luego salda reutilizando `pay_fixed_expense`. Migración `0009_pay_fixed_by_id.sql`.
+   - **Fix (app):** `usePayFixedExpense` ahora recibe `fixedExpenseId` (siempre disponible) en vez de `paymentId`; `FixedExpenseRow` llama con `item.fixed_expense_id` y se quitó el `disabled` por `payment_id` nulo. "Deshacer" sigue usando `payment_id` (solo aparece cuando ya existe).
+
+2. ✅ **Modo oscuro (Espresso y Dark Cherry): ~70% del texto no se leía.** La causa NO eran las paletas —los tokens dark de `themes.ts` son idénticos a `Estilo_design/theme.css` y tienen buen contraste—, sino un error de migración: ~28 textos usaban `color: t.espresso` / `color: t.coffee` como color de **letra**. Esos alias apuntan a los colores de **fondo** de marca (`espresso`/`espresso2`), que en claro son marrones legibles pero en oscuro son casi negros (`#0F0B08`, `#2A1F17`, `#5C1228`) → letra casi negra sobre fondo casi negro (títulos, encabezados, "Atrás", "Ver todos", valores de resumen, tab activo, links).
+   - **Fix:** `color: t.espresso` → `color: t.textPrimary` (token `ink`, que sí invierte a claro en oscuro, tal como el diseño usa `--ink` para títulos); `color: t.coffee` → `color: t.caramel` (accent legible en ambos modos, como `.link`/`.btn--ghost` en el CSS). Solo se tocaron usos de **texto**; los `backgroundColor`/`borderColor`/`shadowColor` de `espresso`/`coffee` (pills activos, botones, FAB) quedan intactos.
+
+**Migración a correr en Supabase:** `0009_pay_fixed_by_id.sql`.
+
+**Verificación:** 0 ocurrencias restantes de `color: t.espresso|coffee` en `src`/`app`; chips/segmentos activos usan `textOnDark` (claro) sobre fondo oscuro → legibles.
+
+> **[Probable]** Si tras esto queda algún elemento puntual ilegible en oscuro, es un `color:` hardcodeado o un token mal asignado en ese componente específico; hace falta una captura de la app corriendo para ubicarlo. La distinción visual de los pills activos en oscuro (fondo `coffee` ≈ `surface`) es un pulido aparte, no un problema de legibilidad de texto.
+
+---
+
 ## Fase 3 — Análisis (semanas 8–10)
 
 1. **Dashboard** con métricas (total mes, por categoría, por medio de pago, tendencia, ticket promedio).

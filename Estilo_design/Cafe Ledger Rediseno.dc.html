@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#d9cdb9}
+  @keyframes barGrow{from{width:0}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @keyframes fabIn{from{opacity:0;transform:translateY(12px) scale(.9)}to{opacity:1;transform:none}}
+  .scr::-webkit-scrollbar{width:0;height:0}
+  .scr{scrollbar-width:none}
+</style>
+</helmet>
+<section id="turn-2" style="{{ themeStyle }}">
+  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:22px 30px;position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--desk,#d9cdb9) 82%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line,#E7DDCD)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(150deg,var(--espresso2,#4C3A2F),var(--espresso,#3A2C24));color:#E9D6BC">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 5.5V4M11 5.5V4M14 5.5V4"/></svg>
+      </div>
+      <div>
+        <div style="font:800 18px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19);letter-spacing:-.01em">Café Ledger · Rediseño</div>
+        <div style="font:500 12.5px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">Consolidado · iOS / Android</div>
+      </div>
+    </div>
+    <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);padding:7px 8px 7px 15px;border-radius:999px;color:var(--ink,#2A1F19);font:700 12px 'Plus Jakarta Sans'">
+      <span>{{ themeLabel }}</span>
+      <span style="width:42px;height:24px;border-radius:999px;background:var(--espresso,#3A2C24);display:inline-flex;align-items:center;padding:3px">
+        <span style="width:18px;height:18px;border-radius:50%;background:var(--gold,#C8974A);transition:transform .25s cubic-bezier(.4,1.3,.5,1);{{ knobStyle }}"></span>
+      </span>
+    </button>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:30px;justify-content:center;align-items:flex-start;padding:38px 30px 70px">
+
+    <!-- ============ INICIO consolidado ============ -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font:800 12px 'Plus Jakarta Sans';background:var(--espresso,#3A2C24);color:#F3E6D2;padding:5px 11px;border-radius:999px;letter-spacing:.04em">Inicio</span>
+        <span style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Toca el <span style="color:var(--caramel,#B07A44)">+</span> para probar el menú</span>
+      </div>
+      <div style="padding:9px;background:linear-gradient(160deg,#2C221B,#17110D);border-radius:46px;box-shadow:0 40px 70px -34px rgba(40,26,16,.75),0 0 0 1px rgba(0,0,0,.25)">
+        <div style="position:relative;width:302px;height:632px;border-radius:38px;overflow:hidden;background:var(--bg,#EFE7DA);color:var(--ink,#2A1F19);display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px 3px;font:700 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19);z-index:2">
+            <span>9:41</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1"/></svg>
+              <svg width="16" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12a10 10 0 0 1 13 0"/><path d="M9 15.5a5 5 0 0 1 6 0"/></svg>
+              <div style="width:23px;height:12px;border:1.5px solid var(--ink,#2A1F19);border-radius:3px;padding:1.5px;display:flex;opacity:.9"><div style="flex:1;background:var(--ink,#2A1F19);border-radius:1px"></div></div>
+            </div>
+          </div>
+
+          <div class="scr" style="flex:1;overflow-y:auto;padding-bottom:96px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 18px 4px">
+              <div><div style="font:600 12px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">Buenos días</div><div style="font:800 17px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Martín</div></div>
+              <div style="width:38px;height:38px;border-radius:50%;background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 5.5V4M11 5.5V4M14 5.5V4"/></svg></div>
+            </div>
+
+            <div style="margin:8px 16px 0;border-radius:26px;padding:20px 22px 22px;background:linear-gradient(150deg,var(--heroFrom,#5A4535),var(--heroTo,#33261E) 78%);color:var(--onHero,#F6ECDD);position:relative;overflow:hidden;box-shadow:0 22px 38px -22px rgba(30,15,20,.75)">
+              <div style="position:absolute;top:-46px;right:-34px;width:158px;height:158px;border-radius:50%;background:radial-gradient(circle at 34% 32%,rgba(255,255,255,.22),transparent 68%)"></div>
+              <div style="position:absolute;bottom:-30px;left:-20px;width:110px;height:110px;border-radius:50%;border:1px solid rgba(255,255,255,.14)"></div>
+              <div style="display:flex;align-items:center;gap:7px;font:600 12.5px 'Plus Jakarta Sans';color:var(--onHeroDim,#D9C3A8);position:relative"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/></svg> Saldo actual</div>
+              <div style="font:600 46px 'Bricolage Grotesque',sans-serif;margin-top:5px;letter-spacing:-.02em;position:relative">81,10<span style="font-size:21px;color:var(--onHeroDim,#CFB48F);margin-left:6px">US$</span></div>
+              <div style="display:flex;gap:8px;margin-top:14px;position:relative">
+                <div style="flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:9px 12px"><div style="font:600 10px 'Plus Jakarta Sans';color:var(--onHeroDim,#B7A085);letter-spacing:.05em">GASTADO · JUL</div><div style="font:700 15px 'Bricolage Grotesque',sans-serif;color:var(--onHeroWarm,#EBC79E);margin-top:2px">130,66</div></div>
+                <div style="flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:9px 12px"><div style="font:600 10px 'Plus Jakarta Sans';color:var(--onHeroDim,#B7A085);letter-spacing:.05em">INGRESOS</div><div style="font:700 15px 'Bricolage Grotesque',sans-serif;color:var(--onHeroGreen,#B7CDA2);margin-top:2px">314,00</div></div>
+              </div>
+            </div>
+
+            <div style="margin:16px 16px 0;background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:22px;padding:16px 17px;box-shadow:0 8px 22px -16px rgba(60,40,25,.4)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><span style="font:700 15px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Presupuestos</span><span style="font:600 12px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Ver todos</span></div>
+              <div style="margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px"><span style="font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Delivery</span><span style="font:700 13px 'Bricolage Grotesque',sans-serif;color:var(--muted,#8C7C6E)">40%</span></div><div style="height:9px;border-radius:999px;background:var(--foam,#F7EFE1);overflow:hidden"><div style="height:100%;width:40%;border-radius:999px;background:linear-gradient(90deg,var(--latte,#C9A57A),var(--caramel,#B07A44));animation:barGrow 1s ease-out"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px;font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)"><span>12,00 de 30,00 US$</span><span>18,00 libre</span></div></div>
+              <div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px"><span style="font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Café</span><span style="font:700 13px 'Bricolage Grotesque',sans-serif;color:var(--caramel,#B07A44)">62%</span></div><div style="height:9px;border-radius:999px;background:var(--foam,#F7EFE1);overflow:hidden"><div style="height:100%;width:62%;border-radius:999px;background:linear-gradient(90deg,var(--latte,#C9A57A),var(--caramel,#B07A44));animation:barGrow 1.2s ease-out"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px;font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)"><span>31,00 de 50,00 US$</span><span>19,00 libre</span></div></div>
+            </div>
+
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin:20px 18px 4px"><span style="font:700 15px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Últimos movimientos</span><span style="font:600 12px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Ver todos</span></div>
+            <div style="padding:0 18px">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="0.6"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Internet-casa</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">3/7/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 20,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h2l2.2 10h9l1.8-7H7"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Uber eats</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">3/7/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 12,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 5.5V4M11 5.5V4"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Café de especialidad</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">2/7/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 12,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Agua</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">2/7/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 2,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Café</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">2/7/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 10,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/><path d="M12 12h.01"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Lentes</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">30/6/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 20,00</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l9-6 9 6v11"/><path d="M9 21v-6h6v6"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Pago pechan</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">30/6/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--neg,#B5654A)">– 100,66</div></div>
+              <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--pos,#6E8B5B) 16%,transparent);display:grid;place-items:center;color:var(--pos,#6E8B5B)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div style="flex:1"><div style="font:600 13.5px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Ingreso</div><div style="font:500 11px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">30/6/2026</div></div><div style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--pos,#6E8B5B)">+ 314,00</div></div>
+            </div>
+          </div>
+
+          <!-- FAB speed-dial overlay -->
+          <sc-if value="{{ fabOpen }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ toggleFab }}" style="position:absolute;inset:0;z-index:8;background:rgba(20,12,7,.42);backdrop-filter:blur(2px)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:98px;z-index:9;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 40px">
+              <button style="width:100%;cursor:pointer;border:none;display:flex;align-items:center;gap:12px;background:var(--espresso,#3A2C24);color:#F3E6D2;padding:15px 18px;border-radius:18px;font:700 14px 'Plus Jakarta Sans';box-shadow:0 16px 30px -14px rgba(45,30,20,.9);animation:fabIn .22s ease-out both">
+                <span style="width:30px;height:30px;border-radius:9px;background:rgba(243,230,210,.14);display:grid;place-items:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/></svg></span>
+                <span style="flex:1;text-align:left">Registrar consumo</span>
+                <span style="font:600 12px 'Plus Jakarta Sans';color:#C9B191">gasto</span>
+              </button>
+              <button style="width:100%;cursor:pointer;display:flex;align-items:center;gap:12px;background:var(--surface,#FBF7F0);color:var(--ink,#2A1F19);border:1.5px solid var(--line,#E7DDCD);padding:15px 18px;border-radius:18px;font:700 14px 'Plus Jakarta Sans';box-shadow:0 16px 30px -16px rgba(45,30,20,.55);animation:fabIn .3s ease-out both">
+                <span style="width:30px;height:30px;border-radius:9px;background:color-mix(in srgb,var(--pos,#6E8B5B) 16%,transparent);display:grid;place-items:center;color:var(--pos,#6E8B5B)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+                <span style="flex:1;text-align:left">Registrar ingreso</span>
+                <span style="font:600 12px 'Plus Jakarta Sans';color:var(--pos,#6E8B5B)">+</span>
+              </button>
+            </div>
+          </sc-if>
+
+          <div style="position:absolute;left:0;right:0;bottom:0;height:78px;z-index:10;background:var(--surface,#FBF7F0);border-top:1px solid var(--line,#E7DDCD);display:flex;align-items:flex-start;padding:11px 8px 0">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--espresso,#3A2C24)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span style="font:700 10px 'Plus Jakarta Sans'">Inicio</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Métricas</span></div>
+            <div style="flex:1;display:flex;justify-content:center"><button onClick="{{ toggleFab }}" style="cursor:pointer;border:none;width:56px;height:56px;border-radius:50%;background:linear-gradient(150deg,var(--caramel,#B07A44),var(--accentDeep,#8C5A2E));color:#fff;display:grid;place-items:center;transform:translateY(-16px);box-shadow:0 12px 22px -8px rgba(80,40,50,.45)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="transition:transform .25s cubic-bezier(.4,1.3,.5,1);{{ fabPlusStyle }}"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v9H4z"/><path d="M2 7h20v4H2z"/><path d="M12 7v13"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Beneficios</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Ajustes</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Nuevo consumo · Simple ============ -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Nuevo movimiento · Simple</span></div>
+      <div style="padding:9px;background:linear-gradient(160deg,#2C221B,#17110D);border-radius:46px;box-shadow:0 40px 70px -34px rgba(40,26,16,.75),0 0 0 1px rgba(0,0,0,.25)">
+        <div style="position:relative;width:302px;height:632px;border-radius:38px;overflow:hidden;background:var(--bg,#EFE7DA);color:var(--ink,#2A1F19);display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px 3px;font:700 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span>9:41</span><div style="display:flex;align-items:center;gap:6px"><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1"/></svg><div style="width:23px;height:12px;border:1.5px solid var(--ink,#2A1F19);border-radius:3px;padding:1.5px;display:flex;opacity:.9"><div style="flex:1;background:var(--ink,#2A1F19);border-radius:1px"></div></div></div></div>
+          <div class="scr" style="flex:1;overflow-y:auto;padding:4px 18px 96px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px"><span style="font:600 14px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Cancelar</span><span style="font:800 16px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Nuevo consumo</span><span style="width:56px"></span></div>
+            <div style="display:flex;background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);border-radius:14px;padding:4px;margin-bottom:20px"><div style="flex:1;text-align:center;padding:9px;border-radius:11px;background:var(--espresso,#3A2C24);color:#F3E6D2;font:700 13px 'Plus Jakarta Sans'">Simple</div><div style="flex:1;text-align:center;padding:9px;color:var(--muted,#8C7C6E);font:600 13px 'Plus Jakarta Sans'">Detallado</div></div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:8px">MONTO</div>
+            <div style="background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:18px;padding:18px 20px;display:flex;align-items:baseline;gap:8px;margin-bottom:22px"><span style="font:600 28px 'Bricolage Grotesque',sans-serif;color:var(--caramel,#B07A44)">$</span><span style="font:600 34px 'Bricolage Grotesque',sans-serif;color:var(--muted,#8C7C6E)">0.00</span><span style="width:2px;height:34px;background:var(--caramel,#B07A44);margin-left:2px;animation:floaty 1.2s ease-in-out infinite"></span></div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:10px">CATEGORÍA</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="display:flex;align-items:center;gap:9px;background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span style="width:26px;height:26px;border-radius:8px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span>Agua</div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span style="width:26px;height:26px;border-radius:8px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 13h6l-1 8 8-11h-6z"/></svg></span>Luz</div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--espresso,#3A2C24);border:1.5px solid var(--espresso,#3A2C24);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:#F3E6D2"><span style="width:26px;height:26px;border-radius:8px;background:rgba(243,230,210,.14);display:grid;place-items:center;color:#E9D6BC"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/></svg></span>Café</div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span style="width:26px;height:26px;border-radius:8px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h2l2.2 10h9l1.8-7H7"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg></span>Mercado</div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span style="width:26px;height:26px;border-radius:8px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M12 11V4"/></svg></span>Comida</div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--surface,#FBF7F0);border:1.5px solid var(--line,#E7DDCD);border-radius:14px;padding:12px 13px;font:600 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span style="width:26px;height:26px;border-radius:8px;background:var(--foam,#F7EFE1);display:grid;place-items:center;color:var(--caramel,#B07A44)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v11H3z"/><path d="M8 21h8M12 17v4"/></svg></span>Ocio</div>
+            </div>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 18px 26px;background:linear-gradient(to top,var(--bg,#EFE7DA) 60%,transparent)"><button style="width:100%;cursor:pointer;border:none;background:var(--espresso,#3A2C24);color:#F3E6D2;padding:16px;border-radius:16px;font:700 14.5px 'Plus Jakarta Sans';box-shadow:0 14px 26px -14px rgba(58,44,36,.9)">Guardar consumo</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Nuevo consumo · Detallado ============ -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Nuevo movimiento · Detallado</span></div>
+      <div style="padding:9px;background:linear-gradient(160deg,#2C221B,#17110D);border-radius:46px;box-shadow:0 40px 70px -34px rgba(40,26,16,.75),0 0 0 1px rgba(0,0,0,.25)">
+        <div style="position:relative;width:302px;height:632px;border-radius:38px;overflow:hidden;background:var(--bg,#EFE7DA);color:var(--ink,#2A1F19);display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px 3px;font:700 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span>9:41</span><div style="display:flex;align-items:center;gap:6px"><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1"/></svg><div style="width:23px;height:12px;border:1.5px solid var(--ink,#2A1F19);border-radius:3px;padding:1.5px;display:flex;opacity:.9"><div style="flex:1;background:var(--ink,#2A1F19);border-radius:1px"></div></div></div></div>
+          <div class="scr" style="flex:1;overflow-y:auto;padding:4px 18px 96px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px"><span style="font:600 14px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Cancelar</span><span style="font:800 16px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Nuevo consumo</span><span style="width:56px"></span></div>
+            <div style="display:flex;background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);border-radius:14px;padding:4px;margin-bottom:20px"><div style="flex:1;text-align:center;padding:9px;color:var(--muted,#8C7C6E);font:600 13px 'Plus Jakarta Sans'">Simple</div><div style="flex:1;text-align:center;padding:9px;border-radius:11px;background:var(--espresso,#3A2C24);color:#F3E6D2;font:700 13px 'Plus Jakarta Sans'">Detallado</div></div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin:2px 0 9px">MEDIO DE PAGO</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+              <span style="background:var(--espresso,#3A2C24);color:#F3E6D2;padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Efectivo</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Débito</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Crédito</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Transferencia</span>
+            </div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:9px">FECHA</div>
+            <div style="display:flex;gap:8px;margin-bottom:18px">
+              <span style="background:var(--espresso,#3A2C24);color:#F3E6D2;padding:9px 15px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Hoy</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 15px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Ayer</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 12px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Hace 2 d</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 12px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Hace 3 d</span>
+            </div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:9px">IMPUESTOS</div>
+            <div style="display:flex;gap:8px;margin-bottom:18px">
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">IVA 15%</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Sin impuestos</span>
+              <span style="background:var(--espresso,#3A2C24);color:#F3E6D2;padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Por definir</span>
+            </div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:9px">RECARGOS Y DESCUENTOS</div>
+            <div style="display:flex;gap:8px;margin-bottom:18px">
+              <span style="border:1.5px dashed var(--line,#E7DDCD);color:var(--caramel,#B07A44);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Recargo</span>
+              <span style="border:1.5px dashed var(--line,#E7DDCD);color:var(--caramel,#B07A44);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Descuento</span>
+            </div>
+            <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.14em;color:var(--muted,#8C7C6E);margin-bottom:9px">ETIQUETAS</div>
+            <div style="display:flex;gap:8px">
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Préstamo</span>
+              <span style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:9px 14px;border-radius:12px;font:600 12.5px 'Plus Jakarta Sans'">Sapo</span>
+            </div>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 18px 26px;background:linear-gradient(to top,var(--bg,#EFE7DA) 60%,transparent)"><button style="width:100%;cursor:pointer;border:none;background:var(--espresso,#3A2C24);color:#F3E6D2;padding:16px;border-radius:16px;font:700 14.5px 'Plus Jakarta Sans';box-shadow:0 14px 26px -14px rgba(58,44,36,.9)">Guardar consumo</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Ajustes (acordeón) ============ -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:700 14px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Ajustes · toca para expandir</span></div>
+      <div style="padding:9px;background:linear-gradient(160deg,#2C221B,#17110D);border-radius:46px;box-shadow:0 40px 70px -34px rgba(40,26,16,.75),0 0 0 1px rgba(0,0,0,.25)">
+        <div style="position:relative;width:302px;height:632px;border-radius:38px;overflow:hidden;background:var(--bg,#EFE7DA);color:var(--ink,#2A1F19);display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px 3px;font:700 13px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)"><span>9:41</span><div style="display:flex;align-items:center;gap:6px"><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1"/></svg><div style="width:23px;height:12px;border:1.5px solid var(--ink,#2A1F19);border-radius:3px;padding:1.5px;display:flex;opacity:.9"><div style="flex:1;background:var(--ink,#2A1F19);border-radius:1px"></div></div></div></div>
+          <div class="scr" style="flex:1;overflow-y:auto;padding:6px 16px 92px">
+            <div style="font:800 22px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19);padding:6px 2px 16px">Ajustes</div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <!-- IVA -->
+              <div style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:18px;overflow:hidden">
+                <div onClick="{{ tglIva }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:17px 18px"><span style="font:700 15.5px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">IVA</span><span style="color:var(--caramel,#B07A44)">{{ ivaIcon }}</span></div>
+                <sc-if value="{{ ivaOpen }}" hint-placeholder-val="{{ false }}"><div style="padding:0 18px 18px"><div style="height:1px;background:var(--line,#E7DDCD);margin-bottom:14px"></div><div style="font:500 12px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E);margin-bottom:10px">Tasa actual: 15%</div><div style="display:flex;align-items:center;gap:10px"><div style="display:flex;align-items:center;gap:6px;background:var(--foam,#F7EFE1);border:1.5px solid var(--line,#E7DDCD);border-radius:13px;padding:11px 14px"><span style="font:700 16px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">15</span><span style="font:600 13px 'Plus Jakarta Sans';color:var(--muted,#8C7C6E)">%</span></div><button style="flex:1;cursor:pointer;border:none;background:var(--espresso,#3A2C24);color:#F3E6D2;padding:13px;border-radius:13px;font:700 13.5px 'Plus Jakarta Sans'">Guardar</button></div></div></sc-if>
+              </div>
+
+              <!-- Categorías -->
+              <div style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:18px;overflow:hidden">
+                <div onClick="{{ tglCat }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:17px 18px"><span style="font:700 15.5px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Categorías</span><span style="color:var(--caramel,#B07A44)">{{ catIcon }}</span></div>
+                <sc-if value="{{ catOpen }}" hint-placeholder-val="{{ true }}"><div style="padding:0 18px 8px">
+                  <div style="height:1px;background:var(--line,#E7DDCD);margin-bottom:4px"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Agua</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 9h12v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V9z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Café</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.5 5.5l1.5 1.5M17 17l1.5 1.5M18.5 5.5L17 7M7 17l-1.5 1.5"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Claude</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M12 11V4"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Comida</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v11H3z"/><path d="M11 9.5l4 2.5-4 2.5z"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Entretenimiento</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="0.6"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Internet</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 13h6l-1 8 8-11h-6z"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Luz</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h2l2.2 10h9l1.8-7H7"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Mercado</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span style="width:30px;height:30px;display:grid;place-items:center;color:var(--ink,#2A1F19)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19h12M8 19v-4a4 4 0 0 1 8 0v4M12 6V4M10 8s0-2 2-2 2 2 2 2"/></svg></span><span style="flex:1;font:600 14px 'Plus Jakarta Sans';color:var(--ink,#2A1F19)">Ocio</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--caramel,#B07A44)">Editar</span><span style="font:600 12.5px 'Plus Jakarta Sans';color:var(--neg,#B5654A)">Eliminar</span></div>
+                  <div style="height:1px;background:var(--line,#E7DDCD)"></div>
+                  <div style="display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 0 6px;color:var(--caramel,#B07A44);font:700 13px 'Plus Jakarta Sans'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Añadir categoría</div>
+                </div></sc-if>
+              </div>
+
+              <!-- Medios de pago -->
+              <div style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:18px;overflow:hidden">
+                <div onClick="{{ tglMed }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:17px 18px"><span style="font:700 15.5px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Medios de pago</span><span style="color:var(--caramel,#B07A44)">{{ medIcon }}</span></div>
+                <sc-if value="{{ medOpen }}" hint-placeholder-val="{{ false }}"><div style="padding:0 18px 14px"><div style="height:1px;background:var(--line,#E7DDCD);margin-bottom:10px"></div><div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Efectivo</span><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Débito</span><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Crédito</span><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Transferencia</span><span style="border:1.5px dashed var(--line,#E7DDCD);color:var(--caramel,#B07A44);padding:8px 12px;border-radius:11px;font:700 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Añadir</span></div></div></sc-if>
+              </div>
+
+              <!-- Etiquetas -->
+              <div style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:18px;overflow:hidden">
+                <div onClick="{{ tglEti }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:17px 18px"><span style="font:700 15.5px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Etiquetas</span><span style="color:var(--caramel,#B07A44)">{{ etiIcon }}</span></div>
+                <sc-if value="{{ etiOpen }}" hint-placeholder-val="{{ false }}"><div style="padding:0 18px 14px"><div style="height:1px;background:var(--line,#E7DDCD);margin-bottom:10px"></div><div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Préstamo</span><span style="background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--ink,#2A1F19);padding:8px 13px;border-radius:11px;font:600 12.5px 'Plus Jakarta Sans'">Sapo</span><span style="border:1.5px dashed var(--line,#E7DDCD);color:var(--caramel,#B07A44);padding:8px 12px;border-radius:11px;font:700 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Añadir</span></div></div></sc-if>
+              </div>
+
+              <!-- Cuenta -->
+              <div style="background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:18px;overflow:hidden">
+                <div onClick="{{ tglCue }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:17px 18px"><span style="font:700 15.5px 'Bricolage Grotesque',sans-serif;color:var(--ink,#2A1F19)">Cuenta</span><span style="color:var(--caramel,#B07A44)">{{ cueIcon }}</span></div>
+                <sc-if value="{{ cueOpen }}" hint-placeholder-val="{{ false }}"><div style="padding:0 18px 16px"><div style="height:1px;background:var(--line,#E7DDCD);margin-bottom:12px"></div>
+                  <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.1em;color:var(--muted,#8C7C6E);margin-bottom:10px">PALETA</div>
+                  <div style="display:flex;gap:10px;margin-bottom:16px">
+                    <button onClick="{{ pickCafe }}" style="flex:1;cursor:pointer;text-align:left;border-radius:14px;padding:12px 13px;font:700 13px 'Plus Jakarta Sans';{{ cafeCard }}"><span style="display:flex;gap:5px;margin-bottom:9px"><span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5A4535,#33261E)"></span><span style="width:20px;height:20px;border-radius:6px;background:#EFE7DA;border:1px solid #E5DACA"></span><span style="width:20px;height:20px;border-radius:6px;background:#B07A44"></span></span>Café</button>
+                    <button onClick="{{ pickCherry }}" style="flex:1;cursor:pointer;text-align:left;border-radius:14px;padding:12px 13px;font:700 13px 'Plus Jakarta Sans';{{ cherryCard }}"><span style="display:flex;gap:5px;margin-bottom:9px"><span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#C23256,#7C1734)"></span><span style="width:20px;height:20px;border-radius:6px;background:#FDEDF1;border:1px solid #F6D4DD"></span><span style="width:20px;height:20px;border-radius:6px;background:#D94E72"></span></span>Cherry</button>
+                  </div>
+                  <div style="font:700 11px 'Plus Jakarta Sans';letter-spacing:.1em;color:var(--muted,#8C7C6E);margin-bottom:10px">MODO</div>
+                  <div style="display:flex;background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);border-radius:13px;padding:4px;margin-bottom:14px"><button onClick="{{ setLight }}" style="flex:1;cursor:pointer;border:none;padding:9px;border-radius:10px;font:700 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;gap:6px;{{ claroBtn }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>{{ lightName }}</button><button onClick="{{ setDark }}" style="flex:1;cursor:pointer;border:none;padding:9px;border-radius:10px;font:700 12.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;gap:6px;{{ oscuroBtn }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/></svg>{{ darkName }}</button></div>
+                  <button style="width:100%;cursor:pointer;background:var(--foam,#F7EFE1);border:1px solid var(--line,#E7DDCD);color:var(--neg,#B5654A);padding:13px;border-radius:13px;font:700 13.5px 'Plus Jakarta Sans'">Cerrar sesión</button>
+                </div></sc-if>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;left:14px;right:14px;bottom:14px;height:64px;background:var(--surface,#FBF7F0);border:1px solid var(--line,#E7DDCD);border-radius:22px;display:flex;align-items:center;padding:0 6px;box-shadow:0 16px 30px -18px rgba(45,30,20,.6)">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Inicio</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Métricas</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted,#8C7C6E)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v9H4z"/><path d="M2 7h20v4H2z"/><path d="M12 7v13"/></svg><span style="font:600 10px 'Plus Jakarta Sans'">Beneficios</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;border-radius:16px;background:var(--espresso,#3A2C24);color:#F3E6D2;margin:0 2px"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg><span style="font:700 10px 'Plus Jakarta Sans'">Ajustes</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { dark: false, family: 'cafe', fabOpen: false, open: { iva:false, cat:true, med:false, eti:false, cue:false } };
+
+  tgl(k){ this.setState(s => ({ open: { ...s.open, [k]: !s.open[k] } })); }
+
+  renderVals() {
+    const dark = this.state.dark;
+    const family = this.state.family;
+    const PAL = {
+      cafe: {
+        light: {
+          '--desk':'#DBCFBB','--bg':'#EFE7DA','--surface':'#FBF7F0','--foam':'#F5ECDD',
+          '--espresso':'#3A2C24','--espresso2':'#4C3A2F','--ink':'#2A1F19','--muted':'#8C7C6E',
+          '--line':'#E5DACA','--caramel':'#B07A44','--latte':'#C9A57A','--pos':'#6E8B5B',
+          '--neg':'#B5654A','--gold':'#C8974A','--accentDeep':'#8C5A2E',
+          '--heroFrom':'#5A4535','--heroTo':'#33261E','--onHero':'#F6ECDD','--onHeroDim':'#D9C3A8','--onHeroWarm':'#EBC79E','--onHeroGreen':'#B7CDA2'
+        },
+        dark: {
+          '--desk':'#140E09','--bg':'#1D1611','--surface':'#28201A','--foam':'#322820',
+          '--espresso':'#0F0B08','--espresso2':'#2A1F17','--ink':'#F1E7DA','--muted':'#A8978A',
+          '--line':'#3A2E26','--caramel':'#D69B5F','--latte':'#C9A57A','--pos':'#8FB176',
+          '--neg':'#DA8B6F','--gold':'#DDB264','--accentDeep':'#A9682F',
+          '--heroFrom':'#3A2A20','--heroTo':'#150E09','--onHero':'#F6ECDD','--onHeroDim':'#C9B79E','--onHeroWarm':'#E9C08F','--onHeroGreen':'#A9C08F'
+        }
+      },
+      cherry: {
+        light: {
+          '--desk':'#F0CDD6','--bg':'#FDEDF1','--surface':'#FFF7F9','--foam':'#FBDEE6',
+          '--espresso':'#B0284A','--espresso2':'#C6395C','--ink':'#3E1420','--muted':'#B07A88',
+          '--line':'#F6D4DD','--caramel':'#D94E72','--latte':'#EE9CB4','--pos':'#5FA06E',
+          '--neg':'#C0304F','--gold':'#E86A8C','--accentDeep':'#8E1F3D',
+          '--heroFrom':'#C23256','--heroTo':'#7C1734','--onHero':'#FFEAF0','--onHeroDim':'#F4C4D2','--onHeroWarm':'#F8B6C8','--onHeroGreen':'#BFE0C4'
+        },
+        dark: {
+          '--desk':'#17080D','--bg':'#240B13','--surface':'#33121C','--foam':'#3F1826',
+          '--espresso':'#5C1228','--espresso2':'#712038','--ink':'#F6DBE3','--muted':'#C093A0',
+          '--line':'#4A2230','--caramel':'#E86A8C','--latte':'#EE9CB4','--pos':'#8FB183',
+          '--neg':'#E8899E','--gold':'#E86A8C','--accentDeep':'#B23A5B',
+          '--heroFrom':'#6E1730','--heroTo':'#2A0A14','--onHero':'#FFEAF0','--onHeroDim':'#E7B9C8','--onHeroWarm':'#F1A8BE','--onHeroGreen':'#A9C08F'
+        }
+      }
+    };
+    const vars = PAL[family][dark ? 'dark' : 'light'];
+    const themeStyle = { ...vars, background:'var(--desk)', minHeight:'100vh', transition:'background .3s ease' };
+    const activeBtn = 'background:var(--espresso);color:#F3E6D2';
+    const idleBtn = 'background:transparent;color:var(--muted)';
+    const selCard = 'background:var(--foam);border:1.5px solid var(--caramel);color:var(--ink)';
+    const idleCard = 'background:var(--surface);border:1.5px solid var(--line);color:var(--muted)';
+    const o = this.state.open;
+    const plusMinus = (v) => React.createElement('span', { style:{ font:"700 22px 'Plus Jakarta Sans'", lineHeight:'1' } }, v ? '\u2212' : '+');
+    const lightName = family === 'cafe' ? 'Latte' : 'Cherry';
+    const darkName = family === 'cafe' ? 'Espresso' : 'Dark Cherry';
+
+    return {
+      dark, themeStyle,
+      toggleTheme: () => this.setState(s => ({ dark: !s.dark })),
+      themeLabel: dark ? darkName : lightName,
+      lightName, darkName,
+      knobStyle: dark ? 'transform:translateX(18px)' : 'transform:translateX(0px)',
+      claroBtn: dark ? idleBtn : activeBtn,
+      oscuroBtn: dark ? activeBtn : idleBtn,
+      setLight: () => this.setState({ dark:false }),
+      setDark: () => this.setState({ dark:true }),
+      cafeCard: family === 'cafe' ? selCard : idleCard,
+      cherryCard: family === 'cherry' ? selCard : idleCard,
+      pickCafe: () => this.setState({ family:'cafe' }),
+      pickCherry: () => this.setState({ family:'cherry' }),
+      fabOpen: this.state.fabOpen,
+      toggleFab: () => this.setState(s => ({ fabOpen: !s.fabOpen })),
+      fabPlusStyle: this.state.fabOpen ? 'transform:rotate(45deg)' : 'transform:rotate(0deg)',
+      ivaOpen:o.iva, catOpen:o.cat, medOpen:o.med, etiOpen:o.eti, cueOpen:o.cue,
+      ivaIcon:plusMinus(o.iva), catIcon:plusMinus(o.cat), medIcon:plusMinus(o.med), etiIcon:plusMinus(o.eti), cueIcon:plusMinus(o.cue),
+      tglIva:()=>this.tgl('iva'), tglCat:()=>this.tgl('cat'), tglMed:()=>this.tgl('med'), tglEti:()=>this.tgl('eti'), tglCue:()=>this.tgl('cue')
+    };
+  }
+}
+</script>
+</body>
+</html>

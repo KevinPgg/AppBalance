@@ -1,6 +1,8 @@
 import { ScrollView, Pressable, Text, Image, View, StyleSheet } from 'react-native';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { categoryIconUri } from '@/features/catalog/categoryIcons';
 
 export type ChipOption = {
@@ -19,6 +21,7 @@ type Props = {
 // Si el icono es un PNG (categorías nuevas) lo muestra como imagen; si es un
 // emoji viejo, lo antepone como texto.
 export function SelectChips({ options, selectedId, onSelect }: Props) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <ScrollView
       horizontal
@@ -52,19 +55,26 @@ export function SelectChips({ options, selectedId, onSelect }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: { gap: spacing.sm, paddingVertical: spacing.xs },
-  chip: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-  },
-  chipActive: { backgroundColor: colors.coffee, borderColor: colors.coffee },
-  chipRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  icon: { width: 20, height: 20, resizeMode: 'contain' },
-  text: { ...typography.body, color: colors.textPrimary },
-  textActive: { color: colors.textOnDark, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    // NOTA: en React Native Web (PWA) `gap` sobre el contentContainer de un
+    // ScrollView horizontal no se aplica de forma fiable; los chips quedaban
+    // pegados. Se usa marginRight por chip (igual que CategoryPicker).
+    row: { paddingVertical: spacing.xs, alignItems: 'center' },
+    chip: {
+      minHeight: 40,
+      justifyContent: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      marginRight: spacing.sm,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+    },
+    chipActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    chipRow: { flexDirection: 'row', alignItems: 'center' },
+    icon: { width: 20, height: 20, resizeMode: 'contain', marginRight: spacing.sm },
+    text: { ...typography.body, color: t.textPrimary },
+    textActive: { color: t.textOnDark, fontWeight: '600' },
+  });

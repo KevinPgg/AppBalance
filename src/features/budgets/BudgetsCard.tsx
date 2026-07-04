@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import { Card } from '@/components/Card';
 import { BudgetRow } from '@/features/budgets/BudgetRow';
 import { useBudgetsStatus } from '@/features/budgets/useBudgets';
-import { colors } from '@/theme/colors';
 import { spacing, typography } from '@/theme/typography';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 const PREVIEW = 3;
 
@@ -12,6 +13,7 @@ const PREVIEW = 3;
 // priorizando los que van más ajustados. Vacío → invita a crear el primero.
 export function BudgetsCard() {
   const router = useRouter();
+  const styles = useThemedStyles(makeStyles);
   const budgets = useBudgetsStatus();
   const items = budgets.data ?? [];
 
@@ -68,18 +70,19 @@ export function BudgetsCard() {
   );
 }
 
-const styles = StyleSheet.create({
-  card: { marginBottom: spacing.lg },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: { ...typography.subtitle, color: colors.espresso },
-  link: { ...typography.body, color: colors.coffee, fontWeight: '600' },
-  empty: { ...typography.body, color: colors.textSecondary, marginTop: spacing.sm },
-  divider: { height: 1, backgroundColor: colors.border, marginTop: spacing.md },
-  rowDivider: { height: 1, backgroundColor: colors.border },
-  moreBtn: { paddingTop: spacing.md, alignItems: 'center' },
-  moreText: { ...typography.caption, color: colors.coffee, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    card: { marginBottom: spacing.lg },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    title: { ...typography.subtitle, color: t.textPrimary },
+    link: { ...typography.body, color: t.caramel, fontWeight: '600' },
+    empty: { ...typography.body, color: t.textSecondary, marginTop: spacing.sm },
+    divider: { height: 1, backgroundColor: t.border, marginTop: spacing.md },
+    rowDivider: { height: 1, backgroundColor: t.border },
+    moreBtn: { paddingTop: spacing.md, alignItems: 'center' },
+    moreText: { ...typography.caption, color: t.caramel, fontWeight: '600' },
+  });

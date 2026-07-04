@@ -5,15 +5,18 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { useAuth } from '@/store/auth';
+import { useThemeStore } from '@/store/theme';
 
 function AuthGate() {
   const { session, initializing, init } = useAuth();
+  const hydrateTheme = useThemeStore((s) => s.hydrate);
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     init();
-  }, [init]);
+    hydrateTheme();
+  }, [init, hydrateTheme]);
 
   useEffect(() => {
     if (initializing) return;
@@ -43,11 +46,17 @@ function AuthGate() {
   );
 }
 
+function ThemedStatusBar() {
+  // Texto claro en modo oscuro (Espresso/Dark Cherry), oscuro en modo claro.
+  const mode = useThemeStore((s) => s.mode);
+  return <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />;
+}
+
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <StatusBar style="light" />
+        <ThemedStatusBar />
         <AuthGate />
       </QueryClientProvider>
     </SafeAreaProvider>

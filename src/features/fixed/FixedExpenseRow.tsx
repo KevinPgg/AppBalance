@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
-import { colors } from '@/theme/colors';
+import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { formatMoney } from '@/lib/money';
+import { categoryIconUri } from '@/features/catalog/categoryIcons';
 import {
   type FixedExpenseCurrent,
   type FixedStatus,
@@ -9,11 +12,19 @@ import {
   useUnpayFixedExpense,
 } from '@/features/fixed/useFixedExpenses';
 
-const STATUS_META: Record<FixedStatus, { label: string; color: string; bg: string }> = {
-  paid: { label: 'Pagado', color: colors.success, bg: 'rgba(107,143,113,0.15)' },
-  unpaid: { label: 'Pendiente', color: colors.warning, bg: 'rgba(201,138,75,0.15)' },
-  overdue: { label: 'Atrasado', color: colors.danger, bg: 'rgba(161,75,60,0.15)' },
-};
+function statusMeta(
+  t: Theme,
+  status: FixedStatus,
+): { label: string; color: string; bg: string } {
+  switch (status) {
+    case 'paid':
+      return { label: 'Pagado', color: t.success, bg: 'rgba(107,143,113,0.15)' };
+    case 'overdue':
+      return { label: 'Atrasado', color: t.danger, bg: 'rgba(161,75,60,0.15)' };
+    default:
+      return { label: 'Pendiente', color: t.warning, bg: 'rgba(201,138,75,0.15)' };
+  }
+}
 
 function dueLabel(item: FixedExpenseCurrent): string {
   if (item.status === 'paid') return 'Saldado este mes';
@@ -28,13 +39,15 @@ type Props = {
 };
 
 export function FixedExpenseRow({ item, onPress }: Props) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const pay = usePayFixedExpense();
   const unpay = useUnpayFixedExpense();
-  const meta = STATUS_META[item.status];
+  const meta = statusMeta(theme, item.status);
   const busy = pay.isPending || unpay.isPending;
+  const iconUri = categoryIconUri(item.category_icon);
 
   function onPay() {
-    if (!item.payment_id) return;
     Alert.alert(
       'Pagar gasto fijo',
       `Se registrará un consumo de ${formatMoney(item.amount_cents)} por "${item.name}".`,
@@ -44,7 +57,7 @@ export function FixedExpenseRow({ item, onPress }: Props) {
           text: 'Pagar',
           onPress: () =>
             pay
-              .mutateAsync({ paymentId: item.payment_id! })
+              .mutateAsync({ fixedExpenseId: item.fixed_expense_id })
               .catch((e: any) =>
                 Alert.alert('No se pudo pagar', e?.message ?? 'Error desconocido'),
               ),
@@ -77,7 +90,11 @@ export function FixedExpenseRow({ item, onPress }: Props) {
   return (
     <Pressable onPress={onPress} style={styles.row}>
       <View style={styles.left}>
-        <Text style={styles.icon}>{item.category_icon ?? '•'}</Text>
+        {iconUri ? (
+          <Image source={{ uri: iconUri }} style={styles.iconImg} />
+        ) : (
+          <Text style={styles.icon}>{item.category_icon ?? '•'}</Text>
+        )}
         <View style={{ flex: 1 }}>
           <Text style={styles.name} numberOfLines={1}>
             {item.name}
@@ -100,7 +117,7 @@ export function FixedExpenseRow({ item, onPress }: Props) {
             <Pressable
               onPress={onPay}
               hitSlop={8}
-              disabled={busy || !item.payment_id}
+              disabled={busy}
               style={styles.payBtn}
             >
               <Text style={styles.payText}>{pay.isPending ? '…' : 'Pagar'}</Text>
@@ -112,33 +129,35 @@ export function FixedExpenseRow({ item, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: spacing.md,
-    gap: spacing.md,
-  },
-  left: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 },
-  icon: { fontSize: 20 },
-  name: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
-  sub: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
-  right: { alignItems: 'flex-end', gap: spacing.xs },
-  amount: { ...typography.body, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
-  actionRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  badge: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
-    borderRadius: radius.pill,
-  },
-  badgeText: { ...typography.caption, fontWeight: '600' },
-  payBtn: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.coffee,
-  },
-  payText: { ...typography.caption, color: colors.textOnDark, fontWeight: '700' },
-  undo: { ...typography.caption, color: colors.textSecondary, textDecorationLine: 'underline' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: spacing.md,
+      gap: spacing.md,
+    },
+    left: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 },
+    icon: { fontSize: 20, width: 24, textAlign: 'center' },
+    iconImg: { width: 24, height: 24, resizeMode: 'contain' },
+    name: { ...typography.body, color: t.textPrimary, fontWeight: '600' },
+    sub: { ...typography.caption, color: t.textSecondary, marginTop: 2 },
+    right: { alignItems: 'flex-end', gap: spacing.xs },
+    amount: { ...typography.body, color: t.textPrimary, fontVariant: ['tabular-nums'] },
+    actionRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+    badge: {
+      paddingHorizontal: spacing.sm,
+      paddingVertical: 2,
+      borderRadius: radius.pill,
+    },
+    badgeText: { ...typography.caption, fontWeight: '600' },
+    payBtn: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+      borderRadius: radius.pill,
+      backgroundColor: t.coffee,
+    },
+    payText: { ...typography.caption, color: t.textOnDark, fontWeight: '700' },
+    undo: { ...typography.caption, color: t.textSecondary, textDecorationLine: 'underline' },
+  });

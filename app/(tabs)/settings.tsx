@@ -11,8 +11,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '@/components/Card';
 import { Button } from '@/components/Button';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme, useThemeStore } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import {
+  THEME_LABELS,
+  FAMILY_SWATCHES,
+  type Theme,
+  type ThemeFamily,
+  type ThemeMode,
+} from '@/theme/themes';
 import { confirmAsync, notify } from '@/lib/confirm';
 import { useAuth } from '@/store/auth';
 import {
@@ -48,6 +56,7 @@ function IconPicker({
   value: string;
   onChange: (icon: string) => void;
 }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconPicker}>
       {CATEGORY_ICONS.map((icon) => {
@@ -78,6 +87,7 @@ function CollapsibleCard({
   onToggle: () => void;
   children: React.ReactNode;
 }) {
+  const styles = useThemedStyles(makeStyles);
   return (
     <Card style={styles.card}>
       <Pressable onPress={onToggle} style={styles.cardHeader} hitSlop={6}>
@@ -89,7 +99,72 @@ function CollapsibleCard({
   );
 }
 
+// Selector de paleta (familia) + modo (claro/oscuro). En Ajustes → Cuenta.
+function ThemeSelector() {
+  const styles = useThemedStyles(makeStyles);
+  const family = useThemeStore((s) => s.family);
+  const mode = useThemeStore((s) => s.mode);
+  const setFamily = useThemeStore((s) => s.setFamily);
+  const setMode = useThemeStore((s) => s.setMode);
+
+  const families: { id: ThemeFamily; name: string }[] = [
+    { id: 'cafe', name: 'Café' },
+    { id: 'cherry', name: 'Cherry' },
+  ];
+  const modes: { id: ThemeMode; glyph: string }[] = [
+    { id: 'light', glyph: '☀' },
+    { id: 'dark', glyph: '☾' },
+  ];
+
+  return (
+    <View>
+      <Text style={styles.addLabel}>Paleta</Text>
+      <View style={styles.paletteGrid}>
+        {families.map((f) => {
+          const active = f.id === family;
+          return (
+            <Pressable
+              key={f.id}
+              onPress={() => setFamily(f.id)}
+              style={[styles.palette, active && styles.paletteActive]}
+            >
+              <View style={styles.swatches}>
+                {FAMILY_SWATCHES[f.id].map((c, i) => (
+                  <View key={i} style={[styles.sw, { backgroundColor: c }]} />
+                ))}
+              </View>
+              <Text style={[styles.paletteName, active && styles.paletteNameActive]}>
+                {f.name}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      <Text style={styles.addLabel}>Modo</Text>
+      <View style={styles.segmented}>
+        {modes.map((m) => {
+          const active = m.id === mode;
+          return (
+            <Pressable
+              key={m.id}
+              onPress={() => setMode(m.id)}
+              style={[styles.segBtn, active && styles.segBtnActive]}
+            >
+              <Text style={[styles.segText, active && styles.segTextActive]}>
+                {m.glyph}  {THEME_LABELS[family][m.id]}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 export default function SettingsScreen() {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const signOut = useAuth((s) => s.signOut);
   const session = useAuth((s) => s.session);
 
@@ -262,7 +337,7 @@ export default function SettingsScreen() {
               value={ivaText}
               onChangeText={setIvaText}
               placeholder={`${currentIva}`}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.textSecondary}
               keyboardType="number-pad"
               inputMode="numeric"
               maxLength={3}
@@ -312,7 +387,7 @@ export default function SettingsScreen() {
                         value={editCatName}
                         onChangeText={setEditCatName}
                         placeholder="Nombre de la categoría"
-                        placeholderTextColor={colors.textSecondary}
+                        placeholderTextColor={theme.textSecondary}
                       />
                       <Button
                         title="Guardar"
@@ -334,7 +409,7 @@ export default function SettingsScreen() {
               value={catName}
               onChangeText={setCatName}
               placeholder="Nombre de la categoría"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.textSecondary}
             />
             <Button title="Añadir" onPress={onAddCategory} loading={createCategory.isPending} />
           </View>
@@ -376,7 +451,7 @@ export default function SettingsScreen() {
               value={pmLabel}
               onChangeText={setPmLabel}
               placeholder="Ej. Visa terminación 1234"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.textSecondary}
             />
             <Button title="Añadir" onPress={onAddPM} loading={createPM.isPending} />
           </View>
@@ -403,7 +478,7 @@ export default function SettingsScreen() {
               value={tagName}
               onChangeText={setTagName}
               placeholder="Nueva etiqueta"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.textSecondary}
             />
             <Button title="Añadir" onPress={onAddTag} loading={createTag.isPending} />
           </View>
@@ -416,6 +491,7 @@ export default function SettingsScreen() {
           onToggle={() => toggle('acc')}
         >
           <Text style={styles.hint}>{session?.user?.email ?? 'Sesión iniciada'}</Text>
+          <ThemeSelector />
           <View style={styles.signOut}>
             <Button title="Cerrar sesión" variant="secondary" onPress={onSignOut} />
           </View>
@@ -425,92 +501,127 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.cream },
-  header: {
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  title: { ...typography.title, color: colors.espresso },
-  body: { padding: spacing.xl, gap: spacing.lg, paddingBottom: spacing.xxl },
-  card: { gap: spacing.sm },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  cardBody: { gap: spacing.sm, marginTop: spacing.sm },
-  section: { ...typography.subtitle, color: colors.espresso },
-  chevron: { ...typography.title, color: colors.textSecondary, lineHeight: 24 },
-  hint: { ...typography.caption, color: colors.textSecondary },
-  addLabel: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: spacing.md,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  inlineRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
-  grow: { flex: 1 },
-  input: {
-    backgroundColor: colors.foam,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    height: 46,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  inputSmall: { width: 80, textAlign: 'center' },
-  pct: { ...typography.subtitle, color: colors.textSecondary },
-  itemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  itemIcon: { width: 32, height: 32, resizeMode: 'contain' },
-  itemEmoji: { fontSize: 28, width: 32, textAlign: 'center' },
-  itemName: { ...typography.body, color: colors.textPrimary, flex: 1 },
-  action: { ...typography.caption, color: colors.coffee, fontWeight: '600' },
-  delete: { ...typography.caption, color: colors.danger, fontWeight: '600' },
-  editBox: {
-    paddingBottom: spacing.md,
-    paddingLeft: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  iconPicker: { marginVertical: spacing.sm },
-  iconTile: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.sm,
-  },
-  iconTileActive: { borderColor: colors.coffee, borderWidth: 2 },
-  tileImg: { width: 34, height: 34, resizeMode: 'contain' },
-  chipRow: { marginVertical: spacing.sm },
-  chip: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-    marginRight: spacing.sm,
-  },
-  chipActive: { backgroundColor: colors.coffee, borderColor: colors.coffee },
-  chipText: { ...typography.body, color: colors.textPrimary },
-  chipTextActive: { color: colors.textOnDark, fontWeight: '600' },
-  signOut: { marginTop: spacing.md },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.cream },
+    header: {
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    title: { ...typography.title, color: t.textPrimary },
+    body: { padding: spacing.xl, gap: spacing.lg, paddingBottom: spacing.xxl },
+    card: { gap: spacing.sm },
+    cardHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    cardBody: { gap: spacing.sm, marginTop: spacing.sm },
+    section: { ...typography.subtitle, color: t.textPrimary },
+    chevron: { ...typography.title, color: t.textSecondary, lineHeight: 24 },
+    hint: { ...typography.caption, color: t.textSecondary },
+    addLabel: {
+      ...typography.caption,
+      color: t.textSecondary,
+      marginTop: spacing.md,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    inlineRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
+    grow: { flex: 1 },
+    input: {
+      backgroundColor: t.foam,
+      borderWidth: 1,
+      borderColor: t.border,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      height: 46,
+      ...typography.body,
+      color: t.textPrimary,
+    },
+    inputSmall: { width: 80, textAlign: 'center' },
+    pct: { ...typography.subtitle, color: t.textSecondary },
+    itemRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingVertical: spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    itemIcon: { width: 32, height: 32, resizeMode: 'contain' },
+    itemEmoji: { fontSize: 28, width: 32, textAlign: 'center' },
+    itemName: { ...typography.body, color: t.textPrimary, flex: 1 },
+    action: { ...typography.caption, color: t.caramel, fontWeight: '600' },
+    delete: { ...typography.caption, color: t.danger, fontWeight: '600' },
+    editBox: {
+      paddingBottom: spacing.md,
+      paddingLeft: spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    iconPicker: { marginVertical: spacing.sm },
+    iconTile: {
+      width: 52,
+      height: 52,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: spacing.sm,
+    },
+    iconTileActive: { borderColor: t.coffee, borderWidth: 2 },
+    tileImg: { width: 34, height: 34, resizeMode: 'contain' },
+    chipRow: { marginVertical: spacing.sm },
+    chip: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+      marginRight: spacing.sm,
+    },
+    chipActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    chipText: { ...typography.body, color: t.textPrimary },
+    chipTextActive: { color: t.textOnDark, fontWeight: '600' },
+    segmented: {
+      flexDirection: 'row',
+      backgroundColor: t.foamToken,
+      borderWidth: 1,
+      borderColor: t.line,
+      borderRadius: 13,
+      padding: 4,
+      marginVertical: spacing.sm,
+    },
+    segBtn: {
+      flex: 1,
+      paddingVertical: 9,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    segBtnActive: { backgroundColor: t.espresso },
+    segText: { ...typography.caption, color: t.muted, fontWeight: '700' },
+    segTextActive: { color: t.onAccent, fontWeight: '700' },
+    paletteGrid: { flexDirection: 'row', gap: 10, marginVertical: spacing.sm },
+    palette: {
+      flex: 1,
+      borderRadius: 14,
+      paddingVertical: 12,
+      paddingHorizontal: 13,
+      backgroundColor: t.surface,
+      borderWidth: 1.5,
+      borderColor: t.line,
+    },
+    paletteActive: { backgroundColor: t.foamToken, borderColor: t.caramel },
+    paletteName: { ...typography.body, color: t.muted, fontWeight: '700' },
+    paletteNameActive: { color: t.ink },
+    swatches: { flexDirection: 'row', gap: 5, marginBottom: 9 },
+    sw: { width: 20, height: 20, borderRadius: 6 },
+    signOut: { marginTop: spacing.md },
+  });

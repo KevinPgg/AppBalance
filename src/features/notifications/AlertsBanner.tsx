@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import {
   type AppNotification,
   type NotificationKind,
@@ -10,14 +12,18 @@ import {
   useMarkAllNotificationsRead,
 } from '@/features/notifications/useNotifications';
 
-const KIND_META: Record<string, { icon: string; color: string; bg: string }> = {
-  budget_exceeded: { icon: '⚠️', color: colors.danger, bg: 'rgba(161,75,60,0.12)' },
-  fixed_overdue: { icon: '⏰', color: colors.danger, bg: 'rgba(161,75,60,0.12)' },
-  fixed_due: { icon: '📅', color: colors.warning, bg: 'rgba(201,138,75,0.12)' },
-};
-
-function metaFor(kind: NotificationKind) {
-  return KIND_META[kind] ?? { icon: '🔔', color: colors.coffee, bg: colors.foam };
+// Meta visual por tipo de aviso (recibe el tema activo).
+function metaFor(t: Theme, kind: NotificationKind): { icon: string; color: string; bg: string } {
+  switch (kind) {
+    case 'budget_exceeded':
+      return { icon: '⚠️', color: t.danger, bg: 'rgba(161,75,60,0.12)' };
+    case 'fixed_overdue':
+      return { icon: '⏰', color: t.danger, bg: 'rgba(161,75,60,0.12)' };
+    case 'fixed_due':
+      return { icon: '📅', color: t.warning, bg: 'rgba(201,138,75,0.12)' };
+    default:
+      return { icon: '🔔', color: t.caramel, bg: t.foam };
+  }
 }
 
 function routeFor(n: AppNotification): string | null {
@@ -30,6 +36,8 @@ function routeFor(n: AppNotification): string | null {
 // lee la tabla notifications (RPC refresh_notifications) y muestra los no leídos.
 export function AlertsBanner() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const notifications = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAll = useMarkAllNotificationsRead();
@@ -40,7 +48,7 @@ export function AlertsBanner() {
   return (
     <View style={styles.wrap}>
       {items.map((n) => {
-        const meta = metaFor(n.kind);
+        const meta = metaFor(theme, n.kind);
         const route = routeFor(n);
         return (
           <Pressable
@@ -69,20 +77,21 @@ export function AlertsBanner() {
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: { gap: spacing.sm, marginBottom: spacing.lg },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-  },
-  icon: { fontSize: 20 },
-  title: { ...typography.body, fontWeight: '700' },
-  body: { ...typography.caption, color: colors.textPrimary, marginTop: 2 },
-  dismiss: { ...typography.body, color: colors.textSecondary, paddingHorizontal: spacing.xs },
-  clearAll: { alignSelf: 'flex-end', paddingVertical: spacing.xs },
-  clearAllText: { ...typography.caption, color: colors.coffee, fontWeight: '600' },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    wrap: { gap: spacing.sm, marginBottom: spacing.lg },
+    item: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+      padding: spacing.md,
+      borderRadius: radius.md,
+      borderWidth: 1,
+    },
+    icon: { fontSize: 20 },
+    title: { ...typography.body, fontWeight: '700' },
+    body: { ...typography.caption, color: t.textPrimary, marginTop: 2 },
+    dismiss: { ...typography.body, color: t.textSecondary, paddingHorizontal: spacing.xs },
+    clearAll: { alignSelf: 'flex-end', paddingVertical: spacing.xs },
+    clearAllText: { ...typography.caption, color: t.caramel, fontWeight: '600' },
+  });

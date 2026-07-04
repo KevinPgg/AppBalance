@@ -5,11 +5,13 @@ import { Card } from '@/components/Card';
 import { FixedExpenseRow } from '@/features/fixed/FixedExpenseRow';
 import { useFixedExpensesCurrent } from '@/features/fixed/useFixedExpenses';
 import { formatMoney } from '@/lib/money';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 
 export default function FixedExpensesScreen() {
   const router = useRouter();
+  const styles = useThemedStyles(makeStyles);
   const fixed = useFixedExpensesCurrent();
   const items = fixed.data ?? [];
 
@@ -78,43 +80,44 @@ export default function FixedExpensesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  back: { ...typography.body, color: colors.coffee, width: 64 },
-  title: { ...typography.subtitle, color: colors.espresso },
-  list: { padding: spacing.xl, gap: spacing.sm },
-  summaryCard: { marginBottom: spacing.sm },
-  summaryLabel: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  summaryValue: { ...typography.display, color: colors.espresso, marginTop: spacing.xs },
-  summarySub: { ...typography.caption, color: colors.textSecondary, marginTop: spacing.xs },
-  rowCard: { paddingVertical: spacing.xs },
-  empty: { ...typography.body, color: colors.textSecondary },
-  footer: {
-    padding: spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.cream,
-  },
-  addBtn: {
-    height: 50,
-    borderRadius: radius.md,
-    backgroundColor: colors.coffee,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addText: { ...typography.subtitle, color: colors.textOnDark },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    back: { ...typography.body, color: t.caramel, width: 64 },
+    title: { ...typography.subtitle, color: t.textPrimary },
+    list: { padding: spacing.xl, gap: spacing.sm },
+    summaryCard: { marginBottom: spacing.sm },
+    summaryLabel: {
+      ...typography.caption,
+      color: t.textSecondary,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    summaryValue: { ...typography.display, color: t.textPrimary, marginTop: spacing.xs },
+    summarySub: { ...typography.caption, color: t.textSecondary, marginTop: spacing.xs },
+    rowCard: { paddingVertical: spacing.xs },
+    empty: { ...typography.body, color: t.textSecondary },
+    footer: {
+      padding: spacing.xl,
+      borderTopWidth: 1,
+      borderTopColor: t.border,
+      backgroundColor: t.cream,
+    },
+    addBtn: {
+      height: 50,
+      borderRadius: radius.md,
+      backgroundColor: t.coffee,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    addText: { ...typography.subtitle, color: t.textOnDark },
+  });

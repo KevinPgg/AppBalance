@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '@/theme/colors';
 import { spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { formatMoney } from '@/lib/money';
 
 export type Tx = {
@@ -14,6 +16,8 @@ export type Tx = {
 };
 
 export function TxRow({ tx }: { tx: Tx }) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const isIncome = tx.type === 'income';
   const sign = isIncome ? '+' : '−';
   return (
@@ -24,24 +28,25 @@ export function TxRow({ tx }: { tx: Tx }) {
         </Text>
         <Text style={styles.sub}>{new Date(tx.occurred_at).toLocaleDateString('es')}</Text>
       </View>
-      <Text style={[styles.amount, { color: isIncome ? colors.success : colors.coffee }]}>
+      <Text style={[styles.amount, { color: isIncome ? theme.pos : theme.neg }]}>
         {sign} {formatMoney(tx.amount_cents).replace(/^[-−]/, '')}
       </Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  left: { flex: 1, marginRight: spacing.md },
-  title: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
-  sub: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
-  amount: { ...typography.subtitle, fontVariant: ['tabular-nums'] },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    left: { flex: 1, marginRight: spacing.md },
+    title: { ...typography.body, color: t.textPrimary, fontWeight: '600' },
+    sub: { ...typography.caption, color: t.textSecondary, marginTop: 2 },
+    amount: { ...typography.subtitle, fontVariant: ['tabular-nums'] },
+  });

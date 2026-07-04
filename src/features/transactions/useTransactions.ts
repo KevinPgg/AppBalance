@@ -17,6 +17,32 @@ export function useBalance() {
   });
 }
 
+export type MonthSummary = { spentCents: number; incomeCents: number };
+
+// Gastado e ingresos del MES en curso (para las pills del hero).
+// RLS limita las filas al usuario actual; se suma en cliente.
+export function useMonthSummary() {
+  return useQuery({
+    queryKey: ['month-summary'],
+    queryFn: async (): Promise<MonthSummary> => {
+      const now = new Date();
+      const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('type, amount_cents')
+        .gte('occurred_at', start);
+      if (error) throw error;
+      let spentCents = 0;
+      let incomeCents = 0;
+      for (const r of (data ?? []) as { type: string; amount_cents: number }[]) {
+        if (r.type === 'expense') spentCents += r.amount_cents;
+        else incomeCents += r.amount_cents;
+      }
+      return { spentCents, incomeCents };
+    },
+  });
+}
+
 export type TransactionDetail = {
   id: string;
   type: 'expense' | 'income';

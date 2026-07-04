@@ -16,8 +16,10 @@ import { Button } from '@/components/Button';
 import { MoneyInput } from '@/components/MoneyInput';
 import { SelectChips } from '@/components/SelectChips';
 import { CategoryPicker } from '@/components/CategoryPicker';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { centsToText, formatMoney, parseToCents } from '@/lib/money';
 import { confirmAsync, notify } from '@/lib/confirm';
 import {
@@ -76,6 +78,8 @@ type Props = {
 };
 
 export function TransactionForm({ mode, initial, onDone }: Props) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const categories = useCategories();
   const paymentMethods = usePaymentMethods();
   const taxTypes = useTaxTypes();
@@ -129,13 +133,14 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
 
   const subtotalCents = parseToCents(subtotalText);
   const ivaRate = settings.data?.iva_rate ?? 0.15;
-  const ivaType = taxTypes.data?.find((t) => t.name === 'IVA');
+  const ivaType = taxTypes.data?.find((tt) => tt.name === 'IVA');
   const currency = settings.data?.currency ?? 'USD';
   const isSimple = entryMode === 'simple';
 
   // El switch "Marcar como préstamo" solo aparece cuando está activa la etiqueta Préstamo.
   const prestamoTag = tags.data?.find(
-    (t) => t.name.trim().toLowerCase() === 'préstamo' || t.name.trim().toLowerCase() === 'prestamo',
+    (tg) =>
+      tg.name.trim().toLowerCase() === 'préstamo' || tg.name.trim().toLowerCase() === 'prestamo',
   );
   const prestamoSelected = !!prestamoTag && selectedTagIds.includes(prestamoTag.id);
 
@@ -365,7 +370,7 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                       setExtras((xs) => xs.map((x) => (x.id === row.id ? { ...x, label: t } : x)))
                     }
                     placeholder="Concepto"
-                    placeholderTextColor={colors.textSecondary}
+                    placeholderTextColor={theme.textSecondary}
                   />
                   <TextInput
                     style={[styles.input, styles.extraAmount]}
@@ -376,7 +381,7 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                       )
                     }
                     placeholder="0.00"
-                    placeholderTextColor={colors.textSecondary}
+                    placeholderTextColor={theme.textSecondary}
                     keyboardType="decimal-pad"
                     inputMode="decimal"
                   />
@@ -408,16 +413,16 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                 <Text style={styles.hint}>Crea etiquetas en Ajustes.</Text>
               ) : (
                 <View style={styles.tagWrap}>
-                  {tags.data!.map((t) => {
-                    const active = selectedTagIds.includes(t.id);
+                  {tags.data!.map((tg) => {
+                    const active = selectedTagIds.includes(tg.id);
                     return (
                       <Pressable
-                        key={t.id}
-                        onPress={() => toggleTag(t.id)}
+                        key={tg.id}
+                        onPress={() => toggleTag(tg.id)}
                         style={[styles.tagChip, active && styles.tagChipActive]}
                       >
                         <Text style={[styles.tagText, active && styles.tagTextActive]}>
-                          {t.name}
+                          {tg.name}
                         </Text>
                       </Pressable>
                     );
@@ -434,8 +439,8 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                   <Switch
                     value={isLoan}
                     onValueChange={setIsLoan}
-                    trackColor={{ true: colors.coffee, false: colors.border }}
-                    thumbColor={colors.foam}
+                    trackColor={{ true: theme.coffee, false: theme.border }}
+                    thumbColor={theme.foam}
                   />
                 </View>
               )}
@@ -446,7 +451,7 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                 value={merchant}
                 onChangeText={setMerchant}
                 placeholder="¿Dónde fue?"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={theme.textSecondary}
               />
 
               <Text style={styles.label}>Nota (opcional)</Text>
@@ -455,7 +460,7 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                 value={note}
                 onChangeText={setNote}
                 placeholder="Detalle…"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={theme.textSecondary}
                 multiline
               />
 
@@ -515,6 +520,8 @@ function SummaryLine({
   strong?: boolean;
   muted?: boolean;
 }) {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <View style={styles.summaryLine}>
       <Text style={[styles.summaryLabel, strong && styles.summaryStrong]}>{label}</Text>
@@ -522,7 +529,7 @@ function SummaryLine({
         style={[
           styles.summaryValue,
           strong && styles.summaryStrong,
-          muted && { color: colors.success },
+          muted && { color: theme.success },
         ]}
       >
         {value}
@@ -531,152 +538,152 @@ function SummaryLine({
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  headerTitle: { ...typography.subtitle, color: colors.espresso },
-  cancel: { ...typography.body, color: colors.coffee, width: 64 },
-  body: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs, flexGrow: 1 },
-  modeRow: {
-    flexDirection: 'row',
-    gap: spacing.xs,
-    backgroundColor: colors.foam,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.xs,
-    marginBottom: spacing.sm,
-  },
-  modeItem: { flex: 1, paddingVertical: spacing.sm, borderRadius: radius.pill, alignItems: 'center' },
-  modeItemActive: { backgroundColor: colors.coffee },
-  modeText: { ...typography.body, color: colors.textSecondary, fontWeight: '600' },
-  modeTextActive: { color: colors.textOnDark },
-  label: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: spacing.lg,
-    marginBottom: spacing.xs,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  hint: { ...typography.body, color: colors.textSecondary },
-  input: {
-    backgroundColor: colors.foam,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    height: 50,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  noteInput: { height: 80, paddingTop: spacing.md, textAlignVertical: 'top' },
-  segment: { flexDirection: 'row', gap: spacing.sm },
-  segItem: {
-    flex: 1,
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-    alignItems: 'center',
-  },
-  segItemActive: { backgroundColor: colors.coffee, borderColor: colors.coffee },
-  segText: { ...typography.caption, color: colors.textPrimary },
-  segTextActive: { color: colors.textOnDark, fontWeight: '700' },
-  extraRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginBottom: spacing.sm,
-  },
-  extraBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeSurcharge: { backgroundColor: colors.warning },
-  badgeDiscount: { backgroundColor: colors.success },
-  extraBadgeText: { color: colors.textOnDark, fontWeight: '700', fontSize: 16 },
-  extraLabel: { flex: 1 },
-  extraAmount: { width: 96, textAlign: 'right' },
-  remove: { ...typography.body, color: colors.danger, paddingHorizontal: spacing.xs },
-  addRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
-  addBtn: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.coffee,
-    borderStyle: 'dashed',
-  },
-  addBtnText: { ...typography.body, color: colors.coffee },
-  tagWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, paddingVertical: spacing.xs },
-  tagChip: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.foam,
-  },
-  tagChipActive: { backgroundColor: colors.coffee, borderColor: colors.coffee },
-  tagText: { ...typography.body, color: colors.textPrimary },
-  tagTextActive: { color: colors.textOnDark, fontWeight: '600' },
-  loanRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: spacing.lg,
-    backgroundColor: colors.foam,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.lg,
-  },
-  loanTitle: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
-  loanSub: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
-  summary: {
-    marginTop: spacing.xl,
-    backgroundColor: colors.foam,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.lg,
-    gap: spacing.xs,
-  },
-  summaryLine: { flexDirection: 'row', justifyContent: 'space-between' },
-  summaryLabel: { ...typography.body, color: colors.textSecondary },
-  summaryValue: {
-    ...typography.body,
-    color: colors.textPrimary,
-    fontVariant: ['tabular-nums'],
-  },
-  summaryStrong: { ...typography.subtitle, color: colors.espresso, fontWeight: '700' },
-  summaryDivider: { height: 1, backgroundColor: colors.border, marginVertical: spacing.sm },
-  deleteBtn: {
-    marginTop: 'auto',
-    paddingVertical: spacing.md,
-    alignItems: 'center',
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.danger,
-  },
-  deleteText: { ...typography.subtitle, color: colors.danger },
-  footer: {
-    padding: spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.cream,
-  },
-});
- 
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: t.border,
+    },
+    headerTitle: { ...typography.subtitle, color: t.textPrimary },
+    cancel: { ...typography.body, color: t.caramel, width: 64 },
+    body: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs, flexGrow: 1 },
+    modeRow: {
+      flexDirection: 'row',
+      gap: spacing.xs,
+      backgroundColor: t.foam,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.border,
+      padding: spacing.xs,
+      marginBottom: spacing.sm,
+    },
+    modeItem: { flex: 1, paddingVertical: spacing.sm, borderRadius: radius.pill, alignItems: 'center' },
+    modeItemActive: { backgroundColor: t.coffee },
+    modeText: { ...typography.body, color: t.textSecondary, fontWeight: '600' },
+    modeTextActive: { color: t.textOnDark },
+    label: {
+      ...typography.caption,
+      color: t.textSecondary,
+      marginTop: spacing.lg,
+      marginBottom: spacing.xs,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    hint: { ...typography.body, color: t.textSecondary },
+    input: {
+      backgroundColor: t.foam,
+      borderWidth: 1,
+      borderColor: t.border,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      height: 50,
+      ...typography.body,
+      color: t.textPrimary,
+    },
+    noteInput: { height: 80, paddingTop: spacing.md, textAlignVertical: 'top' },
+    segment: { flexDirection: 'row', gap: spacing.sm },
+    segItem: {
+      flex: 1,
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+      alignItems: 'center',
+    },
+    segItemActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    segText: { ...typography.caption, color: t.textPrimary },
+    segTextActive: { color: t.textOnDark, fontWeight: '700' },
+    extraRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      marginBottom: spacing.sm,
+    },
+    extraBadge: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    badgeSurcharge: { backgroundColor: t.warning },
+    badgeDiscount: { backgroundColor: t.success },
+    extraBadgeText: { color: t.textOnDark, fontWeight: '700', fontSize: 16 },
+    extraLabel: { flex: 1 },
+    extraAmount: { width: 96, textAlign: 'right' },
+    remove: { ...typography.body, color: t.danger, paddingHorizontal: spacing.xs },
+    addRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
+    addBtn: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.lg,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.coffee,
+      borderStyle: 'dashed',
+    },
+    addBtnText: { ...typography.body, color: t.caramel },
+    tagWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, paddingVertical: spacing.xs },
+    tagChip: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.pill,
+      borderWidth: 1,
+      borderColor: t.border,
+      backgroundColor: t.foam,
+    },
+    tagChipActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    tagText: { ...typography.body, color: t.textPrimary },
+    tagTextActive: { color: t.textOnDark, fontWeight: '600' },
+    loanRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: spacing.lg,
+      backgroundColor: t.foam,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.border,
+      padding: spacing.lg,
+    },
+    loanTitle: { ...typography.body, color: t.textPrimary, fontWeight: '600' },
+    loanSub: { ...typography.caption, color: t.textSecondary, marginTop: 2 },
+    summary: {
+      marginTop: spacing.xl,
+      backgroundColor: t.foam,
+      borderRadius: radius.lg,
+      borderWidth: 1,
+      borderColor: t.border,
+      padding: spacing.lg,
+      gap: spacing.xs,
+    },
+    summaryLine: { flexDirection: 'row', justifyContent: 'space-between' },
+    summaryLabel: { ...typography.body, color: t.textSecondary },
+    summaryValue: {
+      ...typography.body,
+      color: t.textPrimary,
+      fontVariant: ['tabular-nums'],
+    },
+    summaryStrong: { ...typography.subtitle, color: t.textPrimary, fontWeight: '700' },
+    summaryDivider: { height: 1, backgroundColor: t.border, marginVertical: spacing.sm },
+    deleteBtn: {
+      marginTop: 'auto',
+      paddingVertical: spacing.md,
+      alignItems: 'center',
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: t.danger,
+    },
+    deleteText: { ...typography.subtitle, color: t.danger },
+    footer: {
+      padding: spacing.xl,
+      borderTopWidth: 1,
+      borderTopColor: t.border,
+      backgroundColor: t.cream,
+    },
+  });

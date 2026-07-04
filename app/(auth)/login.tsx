@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
-import { colors } from '@/theme/colors';
 import { radius, spacing, typography } from '@/theme/typography';
+import { useTheme } from '@/store/theme';
+import { useThemedStyles } from '@/theme/useThemedStyles';
+import type { Theme } from '@/theme/themes';
 import { useAuth } from '@/store/auth';
 
 export default function LoginScreen() {
+  const theme = useTheme();
+  const styles = useThemedStyles(makeStyles);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -43,7 +47,7 @@ export default function LoginScreen() {
           <TextInput
             style={styles.input}
             placeholder="tu@email.com"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             autoCapitalize="none"
             autoComplete="email"
             keyboardType="email-address"
@@ -53,7 +57,7 @@ export default function LoginScreen() {
           <TextInput
             style={styles.input}
             placeholder="Contraseña"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             autoCapitalize="none"
             secureTextEntry
             value={password}
@@ -77,26 +81,27 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.cream },
-  inner: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
-  brand: { ...typography.display, color: colors.espresso, marginBottom: spacing.xs },
-  subtitle: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.xxl },
-  form: { gap: spacing.md },
-  input: {
-    backgroundColor: colors.foam,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    height: 50,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  switch: {
-    ...typography.body,
-    color: colors.coffee,
-    textAlign: 'center',
-    marginTop: spacing.sm,
-  },
-});
+const makeStyles = (t: Theme) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.cream },
+    inner: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
+    brand: { ...typography.display, color: t.textPrimary, marginBottom: spacing.xs },
+    subtitle: { ...typography.body, color: t.textSecondary, marginBottom: spacing.xxl },
+    form: { gap: spacing.md },
+    input: {
+      backgroundColor: t.foam,
+      borderWidth: 1,
+      borderColor: t.border,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.lg,
+      height: 50,
+      ...typography.body,
+      color: t.textPrimary,
+    },
+    switch: {
+      ...typography.body,
+      color: t.caramel,
+      textAlign: 'center',
+      marginTop: spacing.sm,
+    },
+  });

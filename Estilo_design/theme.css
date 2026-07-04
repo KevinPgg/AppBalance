@@ -1,0 +1,211 @@
+/* ============================================================
+   Café Ledger · Sistema de temas (Café + Cherry, claro/oscuro)
+   ------------------------------------------------------------
+   Uso:
+     <html data-family="cafe"  data-mode="light">  ← Latte
+     <html data-family="cafe"  data-mode="dark">   ← Espresso
+     <html data-family="cherry" data-mode="light"> ← Cherry
+     <html data-family="cherry" data-mode="dark">  ← Dark Cherry
+   Cambia esos dos atributos (ver theme.js) y TODO recolorea solo,
+   porque cada componente usa las variables --token.
+   ============================================================ */
+
+/* ---------- Tipografía ---------- */
+/* Pega esto en el <head>:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+*/
+
+:root{
+  --font-display:'Bricolage Grotesque', system-ui, sans-serif; /* títulos y números */
+  --font-body:'Plus Jakarta Sans', system-ui, sans-serif;      /* texto / UI */
+  --radius-card:22px;
+  --radius-lg:26px;
+  --radius-md:16px;
+  --radius-sm:12px;
+}
+
+/* ============================================================
+   PALETAS  —  cada tema define el mismo set de tokens
+   ============================================================ */
+
+/* ---- CAFÉ · Latte (claro) ---- */
+html[data-family="cafe"][data-mode="light"]{
+  --desk:#DBCFBB; --bg:#EFE7DA; --surface:#FBF7F0; --foam:#F5ECDD;
+  --espresso:#3A2C24; --espresso2:#4C3A2F; --ink:#2A1F19; --muted:#8C7C6E;
+  --line:#E5DACA; --caramel:#B07A44; --latte:#C9A57A; --pos:#6E8B5B;
+  --neg:#B5654A; --gold:#C8974A; --accent-deep:#8C5A2E;
+  --hero-from:#5A4535; --hero-to:#33261E;
+  --on-hero:#F6ECDD; --on-hero-dim:#D9C3A8; --on-hero-warm:#EBC79E; --on-hero-green:#B7CDA2;
+  --on-accent:#F3E6D2;
+}
+/* ---- CAFÉ · Espresso (oscuro) ---- */
+html[data-family="cafe"][data-mode="dark"]{
+  --desk:#140E09; --bg:#1D1611; --surface:#28201A; --foam:#322820;
+  --espresso:#0F0B08; --espresso2:#2A1F17; --ink:#F1E7DA; --muted:#A8978A;
+  --line:#3A2E26; --caramel:#D69B5F; --latte:#C9A57A; --pos:#8FB176;
+  --neg:#DA8B6F; --gold:#DDB264; --accent-deep:#A9682F;
+  --hero-from:#3A2A20; --hero-to:#150E09;
+  --on-hero:#F6ECDD; --on-hero-dim:#C9B79E; --on-hero-warm:#E9C08F; --on-hero-green:#A9C08F;
+  --on-accent:#F3E6D2;
+}
+/* ---- CHERRY · Cherry (claro) ---- */
+html[data-family="cherry"][data-mode="light"]{
+  --desk:#F0CDD6; --bg:#FDEDF1; --surface:#FFF7F9; --foam:#FBDEE6;
+  --espresso:#B0284A; --espresso2:#C6395C; --ink:#3E1420; --muted:#B07A88;
+  --line:#F6D4DD; --caramel:#D94E72; --latte:#EE9CB4; --pos:#5FA06E;
+  --neg:#C0304F; --gold:#E86A8C; --accent-deep:#8E1F3D;
+  --hero-from:#C23256; --hero-to:#7C1734;
+  --on-hero:#FFEAF0; --on-hero-dim:#F4C4D2; --on-hero-warm:#F8B6C8; --on-hero-green:#BFE0C4;
+  --on-accent:#FFEAF0;
+}
+/* ---- CHERRY · Dark Cherry (oscuro) ---- */
+html[data-family="cherry"][data-mode="dark"]{
+  --desk:#17080D; --bg:#240B13; --surface:#33121C; --foam:#3F1826;
+  --espresso:#5C1228; --espresso2:#712038; --ink:#F6DBE3; --muted:#C093A0;
+  --line:#4A2230; --caramel:#E86A8C; --latte:#EE9CB4; --pos:#8FB183;
+  --neg:#E8899E; --gold:#E86A8C; --accent-deep:#B23A5B;
+  --hero-from:#6E1730; --hero-to:#2A0A14;
+  --on-hero:#FFEAF0; --on-hero-dim:#E7B9C8; --on-hero-warm:#F1A8BE; --on-hero-green:#A9C08F;
+  --on-accent:#FFEAF0;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s ease, color .3s ease;
+}
+.app{ max-width:430px; margin:0 auto; min-height:100vh; background:var(--bg); }
+
+/* Ocultar scrollbars en zonas scrolleables */
+.scroll{ overflow-y:auto; scrollbar-width:none; }
+.scroll::-webkit-scrollbar{ width:0; height:0; }
+
+/* ============================================================
+   HERO · card de saldo
+   ============================================================ */
+.hero{
+  border-radius:var(--radius-lg);
+  padding:20px 22px 22px;
+  background:linear-gradient(150deg, var(--hero-from), var(--hero-to) 78%);
+  color:var(--on-hero);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 22px 38px -22px rgba(30,15,20,.75);
+}
+.hero::before{ /* brillo/espuma */
+  content:""; position:absolute; top:-46px; right:-34px; width:158px; height:158px;
+  border-radius:50%; background:radial-gradient(circle at 34% 32%, rgba(255,255,255,.22), transparent 68%);
+}
+.hero__label{ display:flex; align-items:center; gap:7px; font-weight:600; font-size:12.5px; color:var(--on-hero-dim); position:relative; }
+.hero__amount{ font-family:var(--font-display); font-weight:600; font-size:46px; letter-spacing:-.02em; margin-top:5px; position:relative; }
+.hero__amount small{ font-size:21px; color:var(--on-hero-dim); margin-left:6px; }
+.hero__stats{ display:flex; gap:8px; margin-top:14px; position:relative; }
+.hero__stat{ flex:1; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.13); border-radius:13px; padding:9px 12px; }
+.hero__stat .k{ font-weight:600; font-size:10px; letter-spacing:.05em; color:var(--on-hero-dim); }
+.hero__stat .v{ font-family:var(--font-display); font-weight:700; font-size:15px; margin-top:2px; }
+.hero__stat .v.spent{ color:var(--on-hero-warm); }
+.hero__stat .v.income{ color:var(--on-hero-green); }
+
+/* ============================================================
+   CARDS / secciones
+   ============================================================ */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-card);
+  padding:16px 17px;
+  box-shadow:0 8px 22px -16px rgba(60,40,25,.4);
+}
+.section-title{ font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--ink); }
+.link{ font-weight:600; font-size:12px; color:var(--caramel); cursor:pointer; }
+.divider{ height:1px; background:var(--line); }
+
+/* ---- Barra de presupuesto ---- */
+.budget__head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
+.budget__track{ height:9px; border-radius:999px; background:var(--foam); overflow:hidden; }
+.budget__fill{ height:100%; border-radius:999px; background:linear-gradient(90deg, var(--latte), var(--caramel)); }
+
+/* ---- Fila de movimiento / lista ---- */
+.row{ display:flex; align-items:center; gap:12px; padding:10px 0; }
+.row__icon{ width:38px; height:38px; border-radius:12px; background:var(--foam); display:grid; place-items:center; color:var(--caramel); flex-shrink:0; }
+.row__icon.income{ background:color-mix(in srgb, var(--pos) 16%, transparent); color:var(--pos); }
+.row__body{ flex:1; min-width:0; }
+.row__name{ font-weight:600; font-size:13.5px; color:var(--ink); }
+.row__meta{ font-weight:500; font-size:11px; color:var(--muted); }
+.row__amt{ font-family:var(--font-display); font-weight:700; font-size:14px; }
+.row__amt.neg{ color:var(--neg); }
+.row__amt.pos{ color:var(--pos); }
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{ cursor:pointer; border:none; border-radius:var(--radius-md); font-family:var(--font-body); font-weight:700; font-size:14px; padding:14px 16px; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:filter .15s ease, border-color .15s ease; }
+.btn--primary{ background:var(--espresso); color:var(--on-accent); box-shadow:0 10px 20px -12px rgba(40,20,20,.7); }
+.btn--primary:hover{ filter:brightness(1.12); }
+.btn--ghost{ background:var(--surface); color:var(--caramel); border:1.5px solid var(--line); }
+.btn--ghost:hover{ border-color:var(--caramel); }
+
+/* ---- Chips seleccionables (medio de pago, fecha, etiquetas) ---- */
+.chip{ background:var(--surface); border:1px solid var(--line); color:var(--ink); padding:9px 14px; border-radius:var(--radius-sm); font-weight:600; font-size:12.5px; cursor:pointer; }
+.chip--active{ background:var(--espresso); border-color:var(--espresso); color:var(--on-accent); }
+.chip--add{ border:1.5px dashed var(--line); color:var(--caramel); display:inline-flex; align-items:center; gap:5px; }
+
+/* ============================================================
+   NAV INFERIOR + FAB
+   ============================================================ */
+.tabbar{ position:sticky; bottom:0; height:78px; background:var(--surface); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:11px 8px 0; }
+.tab{ flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--muted); font-weight:600; font-size:10px; cursor:pointer; background:none; border:none; }
+.tab--active{ color:var(--espresso); font-weight:700; }
+.fab{ cursor:pointer; border:none; width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(150deg, var(--caramel), var(--accent-deep));
+  color:#fff; display:grid; place-items:center; transform:translateY(-16px);
+  box-shadow:0 12px 22px -8px rgba(80,40,50,.45); }
+.fab svg{ transition:transform .25s cubic-bezier(.4,1.3,.5,1); }
+.fab.open svg{ transform:rotate(45deg); }
+
+/* ---- Speed-dial del FAB ---- */
+.fab-overlay{ position:absolute; inset:0; z-index:8; background:rgba(20,12,7,.42); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .2s ease; }
+.fab-overlay.open{ opacity:1; pointer-events:auto; }
+.fab-menu{ position:absolute; left:0; right:0; bottom:98px; z-index:9; display:flex; flex-direction:column; align-items:center; gap:12px; padding:0 40px; pointer-events:none; }
+.fab-menu.open{ pointer-events:auto; }
+.fab-item{ width:100%; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:18px; font-weight:700; font-size:14px; cursor:pointer; opacity:0; transform:translateY(12px); }
+.fab-menu.open .fab-item{ animation:fabIn .22s ease-out forwards; }
+.fab-menu.open .fab-item:nth-child(2){ animation-delay:.05s; }
+.fab-item--expense{ background:var(--espresso); color:var(--on-accent); border:none; box-shadow:0 16px 30px -14px rgba(40,20,20,.8); }
+.fab-item--income{ background:var(--surface); color:var(--ink); border:1.5px solid var(--line); box-shadow:0 16px 30px -16px rgba(40,20,20,.4); }
+.fab-item .ic{ width:30px; height:30px; border-radius:9px; display:grid; place-items:center; }
+.fab-item--expense .ic{ background:rgba(255,255,255,.14); }
+.fab-item--income .ic{ background:color-mix(in srgb, var(--pos) 16%, transparent); color:var(--pos); }
+@keyframes fabIn{ to{ opacity:1; transform:none; } }
+
+/* ============================================================
+   ACORDEÓN (Ajustes)
+   ============================================================ */
+.acc{ background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+.acc__head{ cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:17px 18px; }
+.acc__title{ font-family:var(--font-display); font-weight:700; font-size:15.5px; color:var(--ink); }
+.acc__sign{ color:var(--caramel); font-weight:700; font-size:22px; line-height:1; }
+.acc__body{ display:none; padding:0 18px 16px; }
+.acc.open .acc__body{ display:block; }
+.acc.open .acc__sign{ font-size:26px; }        /* + → − se hace en JS con textContent */
+
+/* ---- Selector de paleta (swatches) ---- */
+.palette-grid{ display:flex; gap:10px; }
+.palette{ flex:1; cursor:pointer; text-align:left; border-radius:14px; padding:12px 13px; font-weight:700; font-size:13px;
+  background:var(--surface); border:1.5px solid var(--line); color:var(--muted); }
+.palette.active{ background:var(--foam); border-color:var(--caramel); color:var(--ink); }
+.palette .swatches{ display:flex; gap:5px; margin-bottom:9px; }
+.palette .sw{ width:20px; height:20px; border-radius:6px; }
+
+/* ---- Segmented (modo claro/oscuro) ---- */
+.segmented{ display:flex; background:var(--foam); border:1px solid var(--line); border-radius:13px; padding:4px; }
+.segmented button{ flex:1; cursor:pointer; border:none; padding:9px; border-radius:10px; font-weight:700; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px; background:transparent; color:var(--muted); }
+.segmented button.active{ background:var(--espresso); color:var(--on-accent); }
