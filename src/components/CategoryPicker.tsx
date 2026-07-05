@@ -90,7 +90,7 @@ const makeStyles = (t: Theme) =>
       borderColor: t.border,
       backgroundColor: t.foam,
     },
-    tileActive: { backgroundColor: t.coffee, borderColor: t.coffee },
+    tileActive: { backgroundColor: t.caramel, borderColor: t.ink, borderWidth: 3 },
     icon: { width: 22, height: 22, resizeMode: 'contain' },
     iconChip: {
       backgroundColor: t.iconBg,
@@ -101,5 +101,5 @@ const makeStyles = (t: Theme) =>
     },
     emoji: { fontSize: 18, width: 22, textAlign: 'center' },
     label: { ...typography.body, color: t.textPrimary, flex: 1 },
-    labelActive: { color: t.textOnDark, fontWeight: '600' },
+    labelActive: { color: t.heroTo, fontWeight: '700' },
   });

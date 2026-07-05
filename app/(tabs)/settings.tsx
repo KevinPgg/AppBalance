@@ -583,7 +583,7 @@ const makeStyles = (t: Theme) =>
       justifyContent: 'center',
       marginRight: spacing.sm,
     },
-    iconTileActive: { borderColor: t.coffee, borderWidth: 2 },
+    iconTileActive: { backgroundColor: t.caramel, borderColor: t.ink, borderWidth: 3 },
     tileImg: { width: 34, height: 34, resizeMode: 'contain' },
     chipRow: { marginVertical: spacing.sm },
     chip: {
