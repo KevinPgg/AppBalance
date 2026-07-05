@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -88,11 +87,11 @@ export function BudgetForm({ mode, initial, onDone }: Props) {
 
   async function onSave() {
     if (limitCents <= 0) {
-      Alert.alert('Falta el límite', 'Escribe el monto máximo del presupuesto.');
+      notify('Falta el límite', 'Escribe el monto máximo del presupuesto.');
       return;
     }
     if (!scopeOk) {
-      Alert.alert('Falta el alcance', 'Elige la categoría o etiqueta del presupuesto.');
+      notify('Falta el alcance', 'Elige la categoría o etiqueta del presupuesto.');
       return;
     }
     const payload = {
@@ -111,7 +110,7 @@ export function BudgetForm({ mode, initial, onDone }: Props) {
       }
       onDone();
     } catch (e: any) {
-      Alert.alert('No se pudo guardar', e?.message ?? 'Error desconocido');
+      notify('No se pudo guardar', e?.message ?? 'Error desconocido');
     }
   }
 

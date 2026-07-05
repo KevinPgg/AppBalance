@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Alert,
   Switch,
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +15,8 @@ import { Button } from '@/components/Button';
 import { MoneyInput } from '@/components/MoneyInput';
 import { SelectChips } from '@/components/SelectChips';
 import { CategoryPicker } from '@/components/CategoryPicker';
+import { DateField } from '@/components/DateField';
+import { toDateStr, todayStr, daysAgoStr, dateStrToISO } from '@/lib/dates';
 import { radius, spacing, typography } from '@/theme/typography';
 import { useTheme } from '@/store/theme';
 import { useThemedStyles } from '@/theme/useThemedStyles';
@@ -125,7 +126,9 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
   );
   const [merchant, setMerchant] = useState(initial?.merchant ?? '');
   const [note, setNote] = useState(initial?.note ?? '');
-  const [daysAgo, setDaysAgo] = useState('0');
+  const [dateStr, setDateStr] = useState<string>(
+    initial ? toDateStr(initial.occurredAt) : todayStr(),
+  );
   const [taxMode, setTaxMode] = useState<TaxMode>(initialTaxMode);
   const [extras, setExtras] = useState<ExtraRow[]>(initialExtras);
   const [isLoan, setIsLoan] = useState(initial?.source === 'loan');
@@ -202,32 +205,30 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
 
   async function onSave() {
     if (subtotalCents <= 0) {
-      Alert.alert('Falta el monto', 'Escribe el monto del consumo.');
+      notify('Falta el monto', 'Escribe el monto del consumo.');
       return;
     }
     if (!categoryId) {
-      Alert.alert('Falta categoría', 'Elige una categoría.');
+      notify('Falta categoría', 'Elige una categoría.');
       return;
     }
     if (totalCents < 0) {
-      Alert.alert('Total negativo', 'Los descuentos superan al subtotal más recargos.');
+      notify('Total negativo', 'Los descuentos superan al subtotal más recargos.');
       return;
     }
     try {
       if (mode === 'edit' && initial) {
         await updateTx.mutateAsync({
           id: initial.id,
-          occurredAt: initial.occurredAt,
+          occurredAt: dateStrToISO(dateStr),
           ...buildPayload(),
         });
       } else {
-        const occurredAt = new Date();
-        occurredAt.setDate(occurredAt.getDate() - Number(daysAgo));
-        await createTx.mutateAsync({ occurredAt: occurredAt.toISOString(), ...buildPayload() });
+        await createTx.mutateAsync({ occurredAt: dateStrToISO(dateStr), ...buildPayload() });
       }
       onDone();
     } catch (e: any) {
-      Alert.alert('No se pudo guardar', e?.message ?? 'Error desconocido');
+      notify('No se pudo guardar', e?.message ?? 'Error desconocido');
     }
   }
 
@@ -293,7 +294,7 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
           </View>
 
           <Text style={styles.label}>{isSimple ? 'Monto' : 'Subtotal'}</Text>
-          <MoneyInput value={subtotalText} onChangeText={setSubtotalText} autoFocus />
+          <MoneyInput value={subtotalText} onChangeText={setSubtotalText} />
 
           <Text style={styles.label}>Categoría</Text>
           {categoryOptions.length === 0 ? (
@@ -315,16 +316,15 @@ export function TransactionForm({ mode, initial, onDone }: Props) {
                 onSelect={setPaymentMethodId}
               />
 
-              {mode === 'create' && (
-                <>
-                  <Text style={styles.label}>Fecha</Text>
-                  <SelectChips
-                    options={DAY_OPTIONS}
-                    selectedId={daysAgo}
-                    onSelect={setDaysAgo}
-                  />
-                </>
-              )}
+              <Text style={styles.label}>Fecha</Text>
+              <SelectChips
+                options={DAY_OPTIONS}
+                selectedId={DAY_OPTIONS.find((o) => daysAgoStr(Number(o.id)) === dateStr)?.id ?? null}
+                onSelect={(id) => setDateStr(daysAgoStr(Number(id)))}
+              />
+              <View style={styles.dateFieldWrap}>
+                <DateField value={dateStr} onChange={setDateStr} />
+              </View>
 
               <Text style={styles.label}>Impuestos</Text>
               <View style={styles.segment}>
@@ -576,6 +576,7 @@ const makeStyles = (t: Theme) =>
       letterSpacing: 0.5,
     },
     hint: { ...typography.body, color: t.textSecondary },
+    dateFieldWrap: { marginTop: spacing.sm },
     input: {
       backgroundColor: t.foam,
       borderWidth: 1,

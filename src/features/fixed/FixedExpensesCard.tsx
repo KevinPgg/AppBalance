@@ -64,7 +64,7 @@ export function FixedExpensesCard() {
           <Text style={styles.title}>Gastos fijos</Text>
           <Text style={styles.sub}>
             {pending.length === 0
-              ? 'Todo saldado este mes 🎉'
+              ? 'Completado'
               : `${formatMoney(pendingTotal)} pendiente · ${pending.length} sin pagar`}
           </Text>
         </View>

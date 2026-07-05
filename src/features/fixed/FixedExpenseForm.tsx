@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -68,15 +67,15 @@ export function FixedExpenseForm({ mode, initial, onDone }: Props) {
 
   async function onSave() {
     if (!name.trim()) {
-      Alert.alert('Falta el nombre', 'Ponle un nombre al gasto fijo.');
+      notify('Falta el nombre', 'Ponle un nombre al gasto fijo.');
       return;
     }
     if (amountCents <= 0) {
-      Alert.alert('Falta el monto', 'Escribe el monto mensual.');
+      notify('Falta el monto', 'Escribe el monto mensual.');
       return;
     }
     if (dueDay != null && (dueDay < 1 || dueDay > 31)) {
-      Alert.alert('Día inválido', 'El día de cobro debe estar entre 1 y 31.');
+      notify('Día inválido', 'El día de cobro debe estar entre 1 y 31.');
       return;
     }
     const payload = {
@@ -94,7 +93,7 @@ export function FixedExpenseForm({ mode, initial, onDone }: Props) {
       }
       onDone();
     } catch (e: any) {
-      Alert.alert('No se pudo guardar', e?.message ?? 'Error desconocido');
+      notify('No se pudo guardar', e?.message ?? 'Error desconocido');
     }
   }
 
@@ -137,7 +136,6 @@ export function FixedExpenseForm({ mode, initial, onDone }: Props) {
             onChangeText={setName}
             placeholder="Renta, Netflix, Internet…"
             placeholderTextColor={theme.textSecondary}
-            autoFocus={mode === 'create'}
           />
 
           <Text style={styles.label}>Monto mensual</Text>

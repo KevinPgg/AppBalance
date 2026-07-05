@@ -1,4 +1,5 @@
 import { ImageBackground, View, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { spacing, typography, radius } from '@/theme/typography';
 import { useThemedStyles } from '@/theme/useThemedStyles';
 import type { Theme } from '@/theme/themes';
@@ -16,6 +17,7 @@ export function UnderConstruction({
   subtitle = 'Estamos trabajando en esta sección. Vuelve pronto.',
 }: Props) {
   const styles = useThemedStyles(makeStyles);
+  const insets = useSafeAreaInsets();
   return (
     <ImageBackground
       source={{ uri: '/under_construction/UnderConstruction.gif' }}
@@ -24,7 +26,7 @@ export function UnderConstruction({
     >
       {/* Velo para que el texto se lea sobre el gif. */}
       <View style={styles.veil} />
-      <View style={styles.card}>
+      <View style={[styles.card, { marginTop: insets.top + spacing.xl }]}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
@@ -34,7 +36,7 @@ export function UnderConstruction({
 
 const makeStyles = (t: Theme) =>
   StyleSheet.create({
-    bg: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    bg: { flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: t.heroTo },
     veil: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(59,42,36,0.55)' },
     card: {
       backgroundColor: t.foam,

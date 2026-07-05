@@ -51,7 +51,9 @@ export function CategoryPicker({ options, selectedId, onSelect, heightRatio = 0.
                 style={[styles.tile, active && styles.tileActive]}
               >
                 {uri ? (
-                  <Image source={{ uri }} style={styles.icon} />
+                  <View style={styles.iconChip}>
+                    <Image source={{ uri }} style={styles.icon} />
+                  </View>
                 ) : (
                   <Text style={styles.emoji}>{opt.icon ?? '•'}</Text>
                 )}
@@ -90,6 +92,13 @@ const makeStyles = (t: Theme) =>
     },
     tileActive: { backgroundColor: t.coffee, borderColor: t.coffee },
     icon: { width: 22, height: 22, resizeMode: 'contain' },
+    iconChip: {
+      backgroundColor: t.iconBg,
+      borderRadius: 8,
+      padding: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     emoji: { fontSize: 18, width: 22, textAlign: 'center' },
     label: { ...typography.body, color: t.textPrimary, flex: 1 },
     labelActive: { color: t.textOnDark, fontWeight: '600' },

@@ -13,7 +13,7 @@ const BAR_H = 68;
 
 // Metadatos por ruta (orden de las pestañas de app/(tabs)/_layout.tsx).
 const TABS: Record<string, { label: string; icon: string }> = {
-  index: { label: 'Inicio', icon: '⌂' },
+  index: { label: 'Inicio', icon: '🏠' },
   dashboard: { label: 'Métricas', icon: '📊' },
   taxes: { label: 'Beneficios', icon: '🏷️' },
   settings: { label: 'Ajustes', icon: '⚙️' },
@@ -130,9 +130,9 @@ const makeStyles = (t: Theme) =>
       paddingTop: 10,
       paddingHorizontal: spacing.sm,
     },
-    tab: { flex: 1, alignItems: 'center', gap: 3 },
-    tabIcon: { fontSize: 19 },
-    tabLabel: { fontSize: 10, fontWeight: '600', color: t.muted },
+    tab: { flex: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 3 },
+    tabIcon: { fontSize: 19, height: 24, lineHeight: 24, textAlign: 'center' },
+    tabLabel: { fontSize: 10, fontWeight: '600', color: t.muted, textAlign: 'center' },
     tabLabelActive: { color: t.textPrimary, fontWeight: '700' },
     fabSlot: { width: 64, alignItems: 'center' },
     fab: {

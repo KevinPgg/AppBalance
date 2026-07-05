@@ -39,7 +39,9 @@ export function SelectChips({ options, selectedId, onSelect }: Props) {
           >
             {iconUri ? (
               <View style={styles.chipRow}>
-                <Image source={{ uri: iconUri }} style={styles.icon} />
+                <View style={styles.iconChip}>
+                  <Image source={{ uri: iconUri }} style={styles.icon} />
+                </View>
                 <Text style={[styles.text, active && styles.textActive]}>{opt.label}</Text>
               </View>
             ) : (
@@ -74,7 +76,15 @@ const makeStyles = (t: Theme) =>
     },
     chipActive: { backgroundColor: t.coffee, borderColor: t.coffee },
     chipRow: { flexDirection: 'row', alignItems: 'center' },
-    icon: { width: 20, height: 20, resizeMode: 'contain', marginRight: spacing.sm },
+    icon: { width: 20, height: 20, resizeMode: 'contain' },
+    iconChip: {
+      backgroundColor: t.iconBg,
+      borderRadius: 8,
+      padding: 4,
+      marginRight: spacing.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     text: { ...typography.body, color: t.textPrimary },
     textActive: { color: t.textOnDark, fontWeight: '600' },
   });

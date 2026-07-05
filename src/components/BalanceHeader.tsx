@@ -49,9 +49,6 @@ export function BalanceHeader({
           <Text style={styles.greetSmall}>{greeting()}</Text>
           {!!name && <Text style={styles.greetName}>{name}</Text>}
         </View>
-        <View style={styles.cup}>
-          <Text style={styles.cupGlyph}>☕</Text>
-        </View>
       </View>
 
       {/* Hero */}
@@ -62,6 +59,7 @@ export function BalanceHeader({
         style={styles.hero}
       >
         <View style={styles.blob} />
+        <View style={styles.blob2} />
         <Text style={styles.label}>💳  Saldo actual</Text>
         <Text style={[styles.amount, negative && styles.amountNeg]}>
           {loading ? '—' : formatMoney(balanceCents, currency)}
@@ -131,6 +129,18 @@ const makeStyles = (t: Theme) =>
       borderRadius: 79,
       backgroundColor: 'rgba(255,255,255,0.10)',
     },
+    // Segundo círculo decorativo: esquina inferior-izquierda. Queda DETRÁS de los
+    // pills (se renderiza antes) y, como los pills ahora son opacos, solo asoma
+    // en la esquina sin transparentarse sobre "Gastado".
+    blob2: {
+      position: 'absolute',
+      bottom: -52,
+      left: -40,
+      width: 150,
+      height: 150,
+      borderRadius: 75,
+      backgroundColor: 'rgba(255,255,255,0.07)',
+    },
     label: { ...typography.caption, color: t.onHeroDim, fontWeight: '600' },
     amount: {
       ...typography.display,
@@ -143,9 +153,9 @@ const makeStyles = (t: Theme) =>
     stats: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
     stat: {
       flex: 1,
-      backgroundColor: 'rgba(255,255,255,0.09)',
+      backgroundColor: t.heroPanel,
       borderWidth: 1,
-      borderColor: 'rgba(255,255,255,0.13)',
+      borderColor: t.heroPanelBorder,
       borderRadius: 13,
       paddingVertical: 9,
       paddingHorizontal: 12,

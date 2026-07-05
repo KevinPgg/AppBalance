@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -14,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { MoneyInput } from '@/components/MoneyInput';
 import { SelectChips } from '@/components/SelectChips';
+import { DateField } from '@/components/DateField';
+import { toDateStr, todayStr, daysAgoStr, dateStrToISO } from '@/lib/dates';
 import { radius, spacing, typography } from '@/theme/typography';
 import { useTheme } from '@/store/theme';
 import { useThemedStyles } from '@/theme/useThemedStyles';
@@ -66,7 +67,9 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
   const [paymentMethodId, setPaymentMethodId] = useState<string | null>(
     initial?.paymentMethodId ?? null,
   );
-  const [daysAgo, setDaysAgo] = useState('0');
+  const [dateStr, setDateStr] = useState<string>(
+    initial ? toDateStr(initial.occurredAt) : todayStr(),
+  );
 
   const amountCents = parseToCents(amountText);
   const isBusy = createTx.isPending || updateTx.isPending;
@@ -77,7 +80,7 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
 
   async function onSave() {
     if (amountCents <= 0) {
-      Alert.alert('Falta el monto', 'Escribe cuánto ingresó.');
+      notify('Falta el monto', 'Escribe cuánto ingresó.');
       return;
     }
     try {
@@ -87,20 +90,18 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
           type: 'income',
           subtotalCents: amountCents,
           amountCents,
-          occurredAt: initial.occurredAt,
+          occurredAt: dateStrToISO(dateStr),
           paymentMethodId,
           incomeOrigin: origin.trim() || null,
           taxStatus: 'definido',
           source: (initial.source as 'manual' | 'loan') ?? 'manual',
         });
       } else {
-        const occurredAt = new Date();
-        occurredAt.setDate(occurredAt.getDate() - Number(daysAgo));
         await createTx.mutateAsync({
           type: 'income',
           subtotalCents: amountCents,
           amountCents,
-          occurredAt: occurredAt.toISOString(),
+          occurredAt: dateStrToISO(dateStr),
           paymentMethodId,
           incomeOrigin: origin.trim() || null,
           taxStatus: 'definido',
@@ -108,7 +109,7 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
       }
       onDone();
     } catch (e: any) {
-      Alert.alert('No se pudo guardar', e?.message ?? 'Error desconocido');
+      notify('No se pudo guardar', e?.message ?? 'Error desconocido');
     }
   }
 
@@ -145,7 +146,7 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
           keyboardShouldPersistTaps="handled"
         >
           <Text style={styles.label}>Monto</Text>
-          <MoneyInput value={amountText} onChangeText={setAmountText} autoFocus />
+          <MoneyInput value={amountText} onChangeText={setAmountText} />
 
           <Text style={styles.label}>Procedencia</Text>
           <TextInput
@@ -170,12 +171,15 @@ export function IncomeForm({ mode, initial, onDone }: Props) {
             onSelect={setPaymentMethodId}
           />
 
-          {mode === 'create' && (
-            <>
-              <Text style={styles.label}>Fecha</Text>
-              <SelectChips options={DAY_OPTIONS} selectedId={daysAgo} onSelect={setDaysAgo} />
-            </>
-          )}
+          <Text style={styles.label}>Fecha</Text>
+          <SelectChips
+            options={DAY_OPTIONS}
+            selectedId={DAY_OPTIONS.find((o) => daysAgoStr(Number(o.id)) === dateStr)?.id ?? null}
+            onSelect={(id) => setDateStr(daysAgoStr(Number(id)))}
+          />
+          <View style={styles.dateFieldWrap}>
+            <DateField value={dateStr} onChange={setDateStr} />
+          </View>
 
           {mode === 'edit' && (
             <Pressable onPress={onDelete} style={styles.deleteBtn} disabled={deleteTx.isPending}>
@@ -234,6 +238,7 @@ const makeStyles = (t: Theme) =>
       ...typography.body,
       color: t.textPrimary,
     },
+    dateFieldWrap: { marginTop: spacing.sm },
     suggestRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm },
     suggest: {
       paddingVertical: spacing.xs,

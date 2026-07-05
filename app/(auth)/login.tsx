@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Pressable } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { radius, spacing, typography } from '@/theme/typography';
 import { useTheme } from '@/store/theme';
 import { useThemedStyles } from '@/theme/useThemedStyles';
 import type { Theme } from '@/theme/themes';
+import { notify } from '@/lib/confirm';
 import { useAuth } from '@/store/auth';
 
 export default function LoginScreen() {
@@ -20,18 +21,18 @@ export default function LoginScreen() {
 
   async function onSubmit() {
     if (!email.includes('@')) {
-      Alert.alert('Email inválido', 'Escribe un correo válido.');
+      notify('Email inválido', 'Escribe un correo válido.');
       return;
     }
     if (password.length < 6) {
-      Alert.alert('Contraseña corta', 'Usa al menos 6 caracteres.');
+      notify('Contraseña corta', 'Usa al menos 6 caracteres.');
       return;
     }
     setLoading(true);
     const fn = mode === 'signin' ? signIn : signUp;
     const { error } = await fn(email.trim(), password);
     setLoading(false);
-    if (error) Alert.alert('Error', error);
+    if (error) notify('Error', error);
     // Si todo va bien, AuthGate redirige solo al detectar la sesión.
   }
 

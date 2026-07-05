@@ -1,5 +1,6 @@
-import { View, Text, Image, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { radius, spacing, typography } from '@/theme/typography';
+import { confirmAsync, notify } from '@/lib/confirm';
 import { useTheme } from '@/store/theme';
 import { useThemedStyles } from '@/theme/useThemedStyles';
 import type { Theme } from '@/theme/themes';
@@ -47,51 +48,42 @@ export function FixedExpenseRow({ item, onPress }: Props) {
   const busy = pay.isPending || unpay.isPending;
   const iconUri = categoryIconUri(item.category_icon);
 
-  function onPay() {
-    Alert.alert(
+  async function onPay() {
+    const ok = await confirmAsync(
       'Pagar gasto fijo',
       `Se registrará un consumo de ${formatMoney(item.amount_cents)} por "${item.name}".`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Pagar',
-          onPress: () =>
-            pay
-              .mutateAsync({ fixedExpenseId: item.fixed_expense_id })
-              .catch((e: any) =>
-                Alert.alert('No se pudo pagar', e?.message ?? 'Error desconocido'),
-              ),
-        },
-      ],
+      'Pagar',
     );
+    if (!ok) return;
+    try {
+      await pay.mutateAsync({ fixedExpenseId: item.fixed_expense_id });
+    } catch (e: any) {
+      notify('No se pudo pagar', e?.message ?? 'Error desconocido');
+    }
   }
 
-  function onUndo() {
+  async function onUndo() {
     if (!item.payment_id) return;
-    Alert.alert(
+    const ok = await confirmAsync(
       'Deshacer pago',
       'Se elimina el consumo enlazado y el gasto vuelve a pendiente.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Deshacer',
-          style: 'destructive',
-          onPress: () =>
-            unpay
-              .mutateAsync(item.payment_id!)
-              .catch((e: any) =>
-                Alert.alert('No se pudo deshacer', e?.message ?? 'Error desconocido'),
-              ),
-        },
-      ],
+      'Deshacer',
     );
+    if (!ok) return;
+    try {
+      await unpay.mutateAsync(item.payment_id!);
+    } catch (e: any) {
+      notify('No se pudo deshacer', e?.message ?? 'Error desconocido');
+    }
   }
 
   return (
     <Pressable onPress={onPress} style={styles.row}>
       <View style={styles.left}>
         {iconUri ? (
-          <Image source={{ uri: iconUri }} style={styles.iconImg} />
+          <View style={styles.iconChip}>
+            <Image source={{ uri: iconUri }} style={styles.iconImg} />
+          </View>
         ) : (
           <Text style={styles.icon}>{item.category_icon ?? '•'}</Text>
         )}
@@ -141,6 +133,13 @@ const makeStyles = (t: Theme) =>
     left: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1 },
     icon: { fontSize: 20, width: 24, textAlign: 'center' },
     iconImg: { width: 24, height: 24, resizeMode: 'contain' },
+    iconChip: {
+      backgroundColor: t.iconBg,
+      borderRadius: 9,
+      padding: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     name: { ...typography.body, color: t.textPrimary, fontWeight: '600' },
     sub: { ...typography.caption, color: t.textSecondary, marginTop: 2 },
     right: { alignItems: 'flex-end', gap: spacing.xs },

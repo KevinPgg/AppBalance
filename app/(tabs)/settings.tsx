@@ -361,7 +361,9 @@ export default function SettingsScreen() {
               <View key={c.id}>
                 <View style={styles.itemRow}>
                   {uri ? (
-                    <Image source={{ uri }} style={styles.itemIcon} />
+                    <View style={styles.itemIconChip}>
+                      <Image source={{ uri }} style={styles.itemIcon} />
+                    </View>
                   ) : (
                     <Text style={styles.itemEmoji}>{c.icon ?? '•'}</Text>
                   )}
@@ -552,6 +554,13 @@ const makeStyles = (t: Theme) =>
       borderBottomColor: t.border,
     },
     itemIcon: { width: 32, height: 32, resizeMode: 'contain' },
+    itemIconChip: {
+      backgroundColor: t.iconBg,
+      borderRadius: 10,
+      padding: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     itemEmoji: { fontSize: 28, width: 32, textAlign: 'center' },
     itemName: { ...typography.body, color: t.textPrimary, flex: 1 },
     action: { ...typography.caption, color: t.caramel, fontWeight: '600' },
@@ -569,7 +578,7 @@ const makeStyles = (t: Theme) =>
       borderRadius: radius.md,
       borderWidth: 1,
       borderColor: t.border,
-      backgroundColor: t.foam,
+      backgroundColor: t.iconBg,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: spacing.sm,
